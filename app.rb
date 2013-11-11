@@ -5,15 +5,15 @@ require 'sinatra/assetpack'
 class App < Sinatra::Base
   set :root, File.dirname(__FILE__)
   set :bind, '0.0.0.0'
-  Less.paths <<  "#{App.root}/app/css" 
+  Less.paths <<  "#{App.root}/public/css" 
 
   register Sinatra::AssetPack
 
 
   assets {
-    serve '/js',     from: 'app/js'        # Default
-    serve '/img',    from: 'app/img'       # Default
-    serve '/css',    from: 'app/css'       # Default
+    serve '/js',     from: 'public/js'        # Default
+    serve '/img',    from: 'public/img'       # Default
+    serve '/css',    from: 'public/css'       # Default
 
     css :main, [
       '/css/main.less'

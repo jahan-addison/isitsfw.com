@@ -1,0 +1,106 @@
+body {
+  html & {
+    width: 100%;
+    height: 100%;
+  }
+  height: 100%;
+  width: 100%;
+  background: @black;
+
+  & > footer {
+    background: url(@footer) repeat-x;
+    height:144px;
+    position:relative;
+    z-index:1;
+    width:100%;
+    clear:both;
+   .container {
+      width:546px;
+      padding: 32px 0;
+      margin: 0 auto;
+      .left {
+        display:inline-block;
+        float:left;
+      }
+      aside {
+        display:inline-block;
+        float:right;
+      }
+    }
+  }
+
+  #outer-wrapper {
+    margin-top:0;
+    background: url(@body) repeat;
+  }
+
+  #wrapper {
+    width: 100%;
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    position: relative;
+    margin-bottom:-144px;
+  }
+}
+
+main {
+  width: 546px;
+  //height: 524px;
+  overflow:auto;
+  z-index:0;
+  margin: 0 auto;
+  padding-bottom:27%;
+  header {
+    margin-left:-26px;
+    padding-top:30%;
+    margin-bottom:5px;
+  }
+  #box {
+    .container {
+      padding: 1px 1em 0;
+    }
+    p {
+      margin-left:10px;
+      margin-top:6px;
+    }
+    input {
+      padding:0 5px;
+    }
+    #search {
+      width: 411px;
+      background: #fffdfc;
+      border: none;
+      margin-left:5px;
+      outline:none;
+      &:hover {
+        outline:none;
+        border:none;
+      }
+      height: 37px;
+    }
+    input, button {
+      margin-top:-8px;
+    }
+    button {
+      width:79px;
+      position: relative;
+      top: -1px;
+      height: 37px;
+      background: @blue;
+      border: none;
+      span {
+        position:relative;
+      }
+      outline:none;
+      &:hover {
+        outline:none;
+        border:none;
+      }
+    }
+    background: fadeout(@black, 84%);
+    .rounded(5px);
+    width:546px;
+    height:103px;
+  }
+}

@@ -25,7 +25,8 @@ class App < Sinatra::Base
     # (Note: that parameter is optional, AssetPack will figure it out.)
     js :main, '/js/main.js', [
       '/js/vendor/**/*.js',
-      '/js/lib/**/*.js'
+      '/js/lib/**/*.js',
+      '/js/main.js'
     ]
 
     js_compression  :yui  # :jsmin | :yui | :closure | :uglify

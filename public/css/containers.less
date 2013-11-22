@@ -47,6 +47,11 @@ body {
 }
 
 main {
+  .response {
+    position:absolute;
+    font-size:2em;
+    color:@red;
+  }
   width: 546px;
   //height: 524px;
   overflow:auto;
@@ -58,7 +63,18 @@ main {
     padding-top:30%;
     margin-bottom:5px;
   }
+  .loading {
+    //margin-left:270px;
+    position: absolute;
+    display:none;
+  }
   #box {
+    position:relative;
+    .loading + div {
+      position:relative;
+      display:inline-block;
+    }
+    position:relative;
     .container {
       padding: 1px 1em 0;
     }
@@ -86,14 +102,14 @@ main {
     }
     button {
       &.error {
-        .transition(0.15s);
+        .transition(0.17s);
         background: @red;
       }
       width:79px;
       position: relative;
-      top: -1px;
+      top: 0px;
       height: 37px;
-      .transition(0.15s);
+      .transition(0.17s);
       background: @blue;
       border: none;
       span {
@@ -111,3 +127,148 @@ main {
     height:103px;
   }
 }
+
+.loading {
+  .pre-loader {
+    position:absolute;
+      /* Size and position */
+    font-size: 5px; /* 1em */
+    width: 1em;
+    height: 1em;
+    position: relative;
+    margin-left:5px; 
+    /* Styles */
+    border-radius: 50%;
+    background: #123456;
+    transform-origin: 50% 250%;
+    animation:
+        blink 4s steps(1, start) infinite, /* Blink */
+        counter-clock 3.0s linear infinite;  /* Rotation */
+
+    /* Dots, clockwise */
+    box-shadow:
+       1em 1em #123456,
+       2em 2em #123456,
+       1em 3em #123456,
+       0em 4em #123456,
+      -1em 3em #123456,
+      -2em 2em #123456,
+      -1em 1em #123456;
+    &:after {
+      /* Size and position */
+      content: "";
+      width: 3em;
+      height: 3em;
+      position: absolute;
+      left: -1em;
+      top: 1em;
+   
+      /* Styles */
+      transform: rotate(45deg);
+      //background: white; /* Fallback */
+      //background: rgba(255,255,255,0.6);
+    }    
+  }
+}
+
+@keyframes counter-clock {
+    to { transform: rotate(-360deg); }
+}
+ 
+@keyframes blink {
+    12.5% {
+    background: rgba(18,52,86,0.6);
+    box-shadow:
+       1em 1em #123456,
+       2em 2em #123456,
+       1em 3em #123456,
+       0em 4em #123456,
+      -1em 3em #123456,
+      -2em 2em #123456,
+      -1em 1em #123456;
+    }
+ 
+    25% {
+    background: #123456;
+    box-shadow:
+       1em 1em rgba(18,52,86,0.6),
+       2em 2em #123456,
+       1em 3em #123456,
+       0em 4em #123456,
+      -1em 3em #123456,
+      -2em 2em #123456,
+      -1em 1em #123456;
+    }
+ 
+    37.5% {
+    background: #123456;
+    box-shadow:
+       1em 1em #123456,
+       2em 2em rgba(18,52,86,0.6),
+       1em 3em #123456,
+       0em 4em #123456,
+      -1em 3em #123456,
+      -2em 2em #123456,
+      -1em 1em #123456;
+    }
+ 
+    50% {
+    background: #123456;
+    box-shadow:
+      1em 1em #123456,
+      2em 2em #123456,
+      1em 3em rgba(18,52,86,0.6),
+      0em 4em #123456,
+      -1em 3em #123456,
+      -2em 2em #123456,
+      -1em 1em #123456;
+    }
+ 
+    62.5% {
+    background: #123456;
+    box-shadow:
+       1em 1em #123456,
+       2em 2em #123456,
+       1em 3em #123456,
+       0em 4em rgba(18,52,86,0.6),
+      -1em 3em #123456,
+      -2em 2em #123456,
+      -1em 1em #123456;
+    }
+ 
+    75% {
+    background: #123456;
+      box-shadow:
+       1em 1em #123456,
+       2em 2em #123456,
+       1em 3em #123456,
+       0em 4em #123456,
+      -1em 3em rgba(18,52,86,0.6),
+      -2em 2em #123456,
+      -1em 1em #123456;
+    }
+ 
+    87.5% {
+    background: #123456;
+    box-shadow:
+       1em 1em #123456,
+       2em 2em #123456,
+       1em 3em #123456,
+       0em 4em #123456,
+      -1em 3em #123456,
+      -2em 2em rgba(18,52,86,0.6),
+      -1em 1em #123456;
+    }
+   
+    100% {
+    background: #123456;
+    box-shadow:
+       1em 1em #123456,
+       2em 2em #123456,
+       1em 3em #123456,
+       0em 4em #123456,
+      -1em 3em #123456,
+      -2em 2em #123456,
+      -1em 1em rgba(18,52,86,0.6);
+    }
+  }

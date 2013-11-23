@@ -7,8 +7,12 @@ $(function() {
   /* URI Validation */
   (function(window, document) {
     // expose the URI object
-    $('#search').on('keyup blur focusout', function() {
+    $('#search').on('keyup blur focusout', function(e) {
         $(this).next().attr('style', '');
+        if (e.which === 13) {
+          $('#search + button').click();
+          return false;
+        }
         var url  = URI($(this).val()),
           proto  = url._parts.protocol,
           host   = url._parts.domain,
@@ -46,16 +50,21 @@ $(function() {
       '<li></li>',
       '<li></li>',
       '</ul>'
-      ].join("\n");
-    var response = "<div class='response'>NO! <a href='#'>(why?)</a></div>"
+    ].join("\n");
+    var response = [
+      "<div class='response no'>NO! <a href='#'>(why?)</a></div>",
+      "<div class='response maybe'>MAYBE? <a href='#'>(why?)</a></div>",
+      "<div class='response not-sure'>NOT SURE! <a href='#'>(why?)</a></div>",
+      "<div class='response yes'>YES! <a href='#'>(why?)</a></div>"
+    ];
     
     var res = function() {
       $('.loading').fadeOut('fast', function() {
         $('#animate').animate({
             left: "0"
          }, 'slow', function() {
-          $('#box').animate({top: '50px'}, 'slow', function() {
-            $(response).insertBefore('#box');
+          $('#box').animate({top: '57px'}, 455, function() {
+            $(response[0]).insertBefore('#box');
           });
          });
       });
@@ -74,7 +83,7 @@ $(function() {
         }, 455, function() {
           $('.loading').html(spinner)
             .fadeIn(1000);
-          window.setTimeout(res, 6000);
+          window.setTimeout(res, 7500);
         });
       }
     });

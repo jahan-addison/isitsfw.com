@@ -74,7 +74,7 @@ $(function() {
         }, 455, function() {
           $('.loading').html(spinner)
             .fadeIn(1000);
-          window.setTimeout(res, 4000);
+          window.setTimeout(res, 6000);
         });
       }
     });

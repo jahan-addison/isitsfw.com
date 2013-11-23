@@ -12,7 +12,31 @@ body {
 }
 
 main {
-
+  .response {
+    font-size:3em;
+    &.maybe {
+      color: @orange;
+    }
+    &.not-sure {
+      color:#D35400;
+    }
+    &.no {
+       color:@red;
+    }
+    &.yes {
+       color:@blue;
+    }
+    a {
+      text-decoration:none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    a, a:hover, a:visited {
+      color:@off-black;
+      font-size:0.35em;
+    }
+  }
   #box {
     input {
       font-size: 15px;

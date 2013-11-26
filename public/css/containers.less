@@ -1,4 +1,36 @@
+#lightbox-outer {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index:5;
+  background: fadeout(#000, 90%);
+}
+
+#lightbox {
+  .close {
+    float:right;
+    display:block;
+    color:#ccc;
+    cursor:pointer;
+    font-size:15px;
+    margin-top:-5px;
+  }
+  position:absolute;
+  overflow: auto;
+  display:none;
+  background:@off-white;
+  padding:0.5em;
+  .rounded(4px);
+  word-wrap: break-word;
+  width:600px;
+  z-index:10;
+  height:500px;
+}
+
 body {
+
   html & {
     width: 100%;
     height: 100%;

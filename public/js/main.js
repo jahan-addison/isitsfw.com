@@ -60,13 +60,7 @@ $(function() {
         if (ext && images.inArray(ext)) {
           $lightbox(ext);
         } 
-        // some other file type
-        else if (ext) {
-          $('#box').animate({top: '57px'}, 455, function() {
-            $(responses[2]).insertBefore('#box');
-          });          
-        }
-        // any thing else
+        // something else
         else
         {
           $('#box').animate({top: '57px'}, 455, function() {

@@ -126,7 +126,7 @@ $(function() {
       if (!errors) {
         $('#animate').animate({
           left: "20px"
-        }, 455, function() {
+        }, 400, function() {
           $('.loading').html(spinner)
             .fadeIn(1000);
           window.setTimeout($response, 7500);

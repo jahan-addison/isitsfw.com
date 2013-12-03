@@ -8,6 +8,7 @@ gem 'thin'
 
 # deps
 gem 'tesseract-ocr'
+gem 'nokogiri'
 
 # assets
 gem 'less'

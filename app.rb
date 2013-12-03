@@ -1,5 +1,7 @@
 require 'sinatra/base'
 require 'less'
+require 'URI'
+require 'nokogiri'
 require 'sinatra/assetpack'
 
 class App < Sinatra::Base
@@ -29,12 +31,26 @@ class App < Sinatra::Base
       '/js/main.js'
     ]
 
-    js_compression  :yui  # :jsmin | :yui | :closure | :uglify
-    css_compression :yui  # :simple | :sass | :yui | :sqwish
+    js_compression  :yui  
+    css_compression :yui 
   }
 
   get '/' do
     erb :index
+  end
+
+  ##
+  # 1) check meta-tags: description, author, keywords, et al
+  # 2) determine priority of content analysis via information type
+  # 3) analyze content
+  # 4) return status code (safety level)
+     # 0) (200): OK (YES)
+     # 1) Maybe
+     # 2) Not Sure
+     # 9) NO
+
+  post '/' do
+
   end
 
   # start the server if ruby file executed directly

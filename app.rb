@@ -35,13 +35,15 @@ class App < Sinatra::Base
     css_compression :yui 
   }
 
+  # todo: accept parameter
+
   get '/' do
     erb :index
   end
 
   ##
-  # 1) check meta-tags: description, author, keywords, et al
-  # 2) determine priority of content analysis via information type
+  # 1) determine priority of content analysis via information type
+  # 2) check meta-tags: description, author, keywords, et al if applicable
   # 3) analyze content
   # 4) return status code (safety level)
      # 0) (200): OK (YES)

@@ -15,6 +15,9 @@ GEM
     jsmin (1.0.1)
     less (2.4.0)
       commonjs (~> 0.2.7)
+    mini_portile (0.5.1)
+    nokogiri (1.6.0)
+      mini_portile (~> 0.5.0)
     rack (1.5.2)
     rack-protection (1.5.1)
       rack
@@ -47,6 +50,7 @@ PLATFORMS
 
 DEPENDENCIES
   less
+  nokogiri
   sinatra
   sinatra-assetpack
   tesseract-ocr

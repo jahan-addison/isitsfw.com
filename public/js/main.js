@@ -29,6 +29,22 @@ $(function() {
   };
   /* end of lightbox function */
 
+  /* Bad file types */
+  var $badFiles = [
+    "doc", "docx", "log", "msg", "odt", "pages", "rtf", "tex", "txt", "wpd", "wps", "csv", "dat", "gbr", "ged", "ibooks", "key", "keychain", "pps", "ppt", "pptx", "sdf",
+    "tar", "tax2012", "vcf", "xml", "aif", "iff", "m3u", "m4a", "mid", "mp3", "mpa", "ra", "wav", "wma", "3g2", "3gp", "asf", "asx", "avi", "flv", "m4v", "mov", "mp4",
+    "mpg", "rm", "srt", "swf", "vob", "wmv", "3dm", "3ds", "max", "obj", "bmp", "dds",
+    "psd", "pspimage", "tga", "thm", "tif",  "yuv", "ai", "eps", "ps", "svg", "indd", "pct", "pdf", "xlr", "xls", "xlsx", "accdb", "db", 
+    "pdb", "apk", "app", "bat", "cgi", "com", "exe", "gadget", "jar", "pif", "vb",
+    "wsf", "dem", "gam", "nes", "rom", "sav", "dwg", "dxf", "gpx", "kml", "kmz", 
+    "fnt", "fon", "otf", "ttf", "cab", "cpl", "cur", "deskthemepack", "dll", "dmp", 
+    "icns", "ico", "lnk", "sys", "cfg", "ini", "prf", "hqx", "mim", "uue", "7z", "cbr",
+    "deb", "gz", "pkg", "rar", "rpm", "sitx", "tar.gz", "zip", "zipx", "bin", "cue", "dmg",
+    "iso", "dbf", "mdb", "plugin", "mdf", "toast", "drv", "vcd", 
+    "xcodeproj", "bak", "tmp", "crdownload", "ics", "msi", "part", "torrent"
+  ];
+  /* End of bad file types */
+
   /* Response function */
   var $response = function() {
     var responses           = [
@@ -50,8 +66,6 @@ $(function() {
         filename = $uri.filename() || undefined;
     var ext      = $uri.suffix()   || undefined;
 
-    console.log(ext);
-
     $('.loading').fadeOut('fast', function() {
       $('#animate').animate({
           left: "0"
@@ -60,6 +74,12 @@ $(function() {
         if (ext && images.inArray(ext)) {
           $lightbox(ext);
         } 
+        // bad file
+        else if (ext && $badFiles.inArray(ext)) {
+          $('#box').animate({top: '57px'}, 455, function() {
+            $(responses[2]).insertBefore('#box');
+          });          
+        }
         // something else
         else
         {
@@ -71,6 +91,7 @@ $(function() {
     });    
   };
   /* end of Response function */
+
 
   /* URI Validation */
   (function(window, document) {

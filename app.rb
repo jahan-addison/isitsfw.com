@@ -1,6 +1,7 @@
 require 'sinatra/base'
+require 'sinatra/json'
 require 'less'
-require 'URI'
+require 'uri'
 require 'nokogiri'
 require 'sinatra/assetpack'
 
@@ -52,7 +53,47 @@ class App < Sinatra::Base
      # 9) NO
 
   post '/' do
+    # status safety codes
+    codes = {
+      :OK       => 0,
+      :MAYBE    => 1,
+      :NOT_SURE => 2,
+      :NO       => 9
+    }
+    # valid images
+    image = [
+      "jpg",
+      "jpeg",
+      "png",
+      "bmp",
+      "gif",
+      "tiff"
+    ]
+    # bad files
+    bad_files = [
+    "doc", "docx", "log", "msg", "odt", "pages", "wpd", "wps", "gbr", "ged", "ibooks", "key", "keychain", "pps", "ppt", "pptx", "sdf",
+    "tar", "tax2012", "aif", "iff", "m3u", "m4a", "mid", "mp3", "mpa", "ra", "wav", "wma", "3g2", "3gp", "asf", "asx", "avi", "flv", "m4v", "mov", "mp4",
+    "mpg", "rm", "srt", "swf", "vob", "wmv", "3dm", "3ds", "max", "obj", "bmp", "dds",
+    "psd", "pspimage", "tga", "thm", "tif",  "yuv", "ai", "eps", "ps", "svg", "indd", "pct", "pdf", "xlr", "xls", "xlsx", "accdb", "db", 
+    "pdb", "apk", "app", "bat", "cgi", "com", "exe", "gadget", "jar", "pif", "vb",
+    "wsf", "dem", "gam", "nes", "rom", "sav", "dwg", "dxf", "gpx", "kml", "kmz", 
+    "fnt", "fon", "otf", "ttf", "cab", "cpl", "cur", "deskthemepack", "dll", "dmp", 
+    "icns", "ico", "lnk", "sys", "cfg", "ini", "prf", "hqx", "mim", "uue", "7z", "cbr",
+    "deb", "gz", "pkg", "rar", "rpm", "sitx", "tar.gz", "zip", "zipx", "bin", "cue", "dmg",
+    "iso", "dbf", "mdb", "plugin", "mdf", "toast", "drv", "vcd", 
+    "xcodeproj", "bak", "tmp", "crdownload", "ics", "msi", "part", "torrent"
+  ];
+    uri = {}
+    begin
+      uri = URI(params[:url])
+    rescue URI::Error
+      # ERROR! status safety not sure!
+      json :status => codes[:NOT_SURE]
+    end
+    
+    suffix = File.extname(uri.path)
 
+    json :suffix => suffix
   end
 
   # start the server if ruby file executed directly

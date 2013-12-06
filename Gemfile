@@ -8,6 +8,7 @@ gem 'thin'
 
 # deps
 gem 'tesseract-ocr'
+gem 'sinatra-contrib'
 gem 'nokogiri'
 
 # assets

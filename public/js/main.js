@@ -31,8 +31,8 @@ $(function() {
 
   /* Bad file types */
   var $badFiles = [
-    "doc", "docx", "log", "msg", "odt", "pages", "rtf", "tex", "txt", "wpd", "wps", "csv", "dat", "gbr", "ged", "ibooks", "key", "keychain", "pps", "ppt", "pptx", "sdf",
-    "tar", "tax2012", "vcf", "xml", "aif", "iff", "m3u", "m4a", "mid", "mp3", "mpa", "ra", "wav", "wma", "3g2", "3gp", "asf", "asx", "avi", "flv", "m4v", "mov", "mp4",
+    "doc", "docx", "log", "msg", "odt", "pages", "wpd", "wps", "gbr", "ged", "ibooks", "key", "keychain", "pps", "ppt", "pptx", "sdf",
+    "tar", "tax2012", "aif", "iff", "m3u", "m4a", "mid", "mp3", "mpa", "ra", "wav", "wma", "3g2", "3gp", "asf", "asx", "avi", "flv", "m4v", "mov", "mp4",
     "mpg", "rm", "srt", "swf", "vob", "wmv", "3dm", "3ds", "max", "obj", "bmp", "dds",
     "psd", "pspimage", "tga", "thm", "tif",  "yuv", "ai", "eps", "ps", "svg", "indd", "pct", "pdf", "xlr", "xls", "xlsx", "accdb", "db", 
     "pdb", "apk", "app", "bat", "cgi", "com", "exe", "gadget", "jar", "pif", "vb",
@@ -65,7 +65,7 @@ $(function() {
     var images   = ['jpg', 'jpeg', 'png', 'bmp', 'gif', 'tiff'];
         filename = $uri.filename() || undefined;
     var ext      = $uri.suffix()   || undefined;
-
+    $.post('http://localhost:8000', {url: $uri.toString()}, function(data) { console.log(data); });
     $('.loading').fadeOut('fast', function() {
       $('#animate').animate({
           left: "0"

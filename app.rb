@@ -93,7 +93,6 @@ class App < Sinatra::Base
     
     suffix = File.extname(uri.path)
 
-    json :suffix => suffix
   end
 
   # start the server if ruby file executed directly

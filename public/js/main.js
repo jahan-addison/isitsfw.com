@@ -2,53 +2,6 @@ $(function() {
 
   window.$uri = undefined;
 
-  /* Bad file types */
-  var $badFiles = [
-    "doc", "docx", "log", "msg", "odt", "pages", "wpd", "wps", "gbr", "ged", "ibooks", "key", "keychain", "pps", "ppt", "pptx", "sdf",
-    "tar", "tax2012", "aif", "iff", "m3u", "m4a", "mid", "mp3", "mpa", "ra", "wav", "wma", "3g2", "3gp", "asf", "asx", "avi", "flv", "m4v", "mov", "mp4",
-    "mpg", "rm", "srt", "swf", "vob", "wmv", "3dm", "3ds", "max", "obj", "bmp", "dds",
-    "psd", "pspimage", "tga", "thm", "tif",  "yuv", "ai", "eps", "ps", "svg", "indd", "pct", "pdf", "xlr", "xls", "xlsx", "accdb", "db", 
-    "pdb", "apk", "app", "bat", "cgi", "com", "exe", "gadget", "jar", "pif", "vb",
-    "wsf", "dem", "gam", "nes", "rom", "sav", "dwg", "dxf", "gpx", "kml", "kmz", 
-    "fnt", "fon", "otf", "ttf", "cab", "cpl", "cur", "deskthemepack", "dll", "dmp", 
-    "icns", "ico", "lnk", "sys", "cfg", "ini", "prf", "hqx", "mim", "uue", "7z", "cbr",
-    "deb", "gz", "pkg", "rar", "rpm", "sitx", "tar.gz", "zip", "zipx", "bin", "cue", "dmg",
-    "iso", "dbf", "mdb", "plugin", "mdf", "toast", "drv", "vcd", 
-    "xcodeproj", "bak", "tmp", "crdownload", "ics", "msi", "part", "torrent"
-  ];
-  /* End of bad file types */
-
-  /* Deferred image load function */
-  $.loadImage = function(url) {
-    // Define a "worker" function that should eventually resolve or reject the deferred object.
-    var loadImage = function(deferred) {
-      var image = new Image();
-       
-      image.onload = loaded;
-      image.onerror = errored; 
-      image.onabort = errored; 
-      image.crossOrigin = "Anonymous"; 
-      image.src = url;
-       
-      function loaded() {
-        unbindEvents();
-        deferred.resolve(image);
-      }
-      function errored() {
-        unbindEvents();
-        deferred.reject(image);
-      }
-      function unbindEvents() {
-        image.onload = null;
-        image.onerror = null;
-        image.onabort = null;
-      }
-    };
-
-    return $.Deferred(loadImage).promise();
-  };
-  /* end of deferred image load function */
-
   /* Lightbox function */
   var $lightbox = function(contents, width, height) {
     var width  = width  || 600;
@@ -77,43 +30,6 @@ $(function() {
     });
   };
   /* end of lightbox function */
-
-  /* Image response */
-  var $imageResponse = function(uri) {
-    var dfd    = new jQuery.Deferred();
-    var status = {status: 0};
-
-    if ($('html').hasClass('ie')) {
-      dfd.reject(false);
-    }
-
-    $.loadImage($uri.toString())
-      .done(function(image) {
-        result(image);
-      })
-      .fail(function(image) {
-        dfd.reject(image);
-      });
-
-    var result = function(image) {
-      $('#Image').remove();
-      image.id            = "Image";
-      $('body').append(image);
-      image.style.display = "none";
-      nude.load(image);
-      $('body').append(image);
-      nude.scan(function(result) {
-        if (result === false) {
-          dfd.resolve(result);
-        } else if (result === true) {
-          // nudity detected!
-          dfd.resolve(result);
-        }
-      });
-    };
-    return dfd.promise();
-  };
-  /* End of image response */
 
   /* Response function */
   var $response = function() {
@@ -148,31 +64,12 @@ $(function() {
       });   
     };
 
-    // Image
-    if (ext && images.inArray(ext)) {
-        $.when( $imageResponse($uri) ).then(
-          function (status) {
-            if (!status) {
-              inject(responses[3]);
-            } else {
-              inject(responses[0]);
-            }
-          },
-          function (status) {
-            // We need to try another method, now
-            alert("status 2" + status);
-          }
-      );
-    } 
-    // bad file
-    else if (ext && $badFiles.inArray(ext)) {
-      inject(responses[2]);
-    }
-    // something else
-    else
-    {
-      inject(responses[0]);
-    }  
+    $.post("http://localhost:8000", {url: $uri.toString()}, function(data) {
+      inject(responses[
+        data.status == 9 ? 3 : data.status
+      ]);
+    });
+ 
   };
   /* end of Response function */
 

@@ -2,6 +2,8 @@ require 'sinatra/base'
 require 'sinatra/json'
 require 'less'
 require 'uri'
+require 'open-uri'
+require 'unirest'
 require 'nokogiri'
 require 'sinatra/assetpack'
 
@@ -83,16 +85,34 @@ class App < Sinatra::Base
     "iso", "dbf", "mdb", "plugin", "mdf", "toast", "drv", "vcd", 
     "xcodeproj", "bak", "tmp", "crdownload", "ics", "msi", "part", "torrent"
   ];
-    uri = {}
-    begin
-      uri = URI(params[:url])
-    rescue URI::Error
-      # ERROR! status safety not sure!
-      json :status => codes[:NOT_SURE]
-    end
-    
-    suffix = File.extname(uri.path)
 
+    uri   = URI(params[:url])
+
+    
+    suffix = File.extname(uri.path).slice(1, File.extname(uri.path).length)
+
+  # 1) determine priority of content analysis via information type
+    # rule out bad files first
+  if bad_files.include? suffix
+    return json :status => codes[:NOT_SURE] 
+  end
+
+  if image.include? suffix
+    Unirest.timeout(15)
+    escaped  = URI.escape(uri.to_s, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+    response = Unirest::get "https://nds.p.mashape.com/?url=" << URI.escape("http://i.embed.ly/1/image/resize?url=" << escaped << "&key=92b31102528511e1a2ec4040d3dc5c07&width=300&height=300", Regexp.new("[^#{URI::PATTERN::UNRESERVED}]")), 
+      headers: { 
+        "X-Mashape-Authorization" => "oDpSINvANRazu7Yi9772wDrcaeHsYKMN"
+      }
+    data = response.body
+    if data["is_nude"]
+      json :status => codes[:NO]
+    else
+      json :status => codes[:OK]
+    end
+  end
+
+  # ...
   end
 
   # start the server if ruby file executed directly

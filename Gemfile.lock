@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    addressable (2.3.5)
     backports (3.3.5)
     call-me (0.0.2.3)
       refining
@@ -14,8 +15,10 @@ GEM
       ffi (>= 0.4.0)
     iso-639 (0.2.4)
     jsmin (1.0.1)
+    json (1.8.1)
     less (2.4.0)
       commonjs (~> 0.2.7)
+    mime-types (2.0)
     mini_portile (0.5.1)
     multi_json (1.8.2)
     nokogiri (1.6.0)
@@ -26,6 +29,8 @@ GEM
     rack-test (0.6.2)
       rack (>= 1.0)
     refining (0.0.5.5)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
     sinatra (1.4.4)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -52,6 +57,10 @@ GEM
       eventmachine (>= 1.0.0)
       rack (>= 1.0.0)
     tilt (1.4.1)
+    unirest (1.1.1)
+      addressable (~> 2.3.5)
+      json (~> 1.8.1)
+      rest-client (~> 1.6.7)
     yui-compressor (0.12.0)
 
 PLATFORMS
@@ -65,4 +74,5 @@ DEPENDENCIES
   sinatra-contrib
   tesseract-ocr
   thin
+  unirest
   yui-compressor

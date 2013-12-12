@@ -37,7 +37,7 @@ $(function() {
       "<div class='response no'>NO! <a href='#'>(why?)</a></div>",
       "<div class='response maybe'>MAYBE? <a href='#'>(more options)</a></div>",
       "<div class='response not-sure'>NOT SURE! <a href='#'>(why?)</a></div>",
-      "<div class='response yes'>YES! <a href='#'>(why?)</a></div>"
+      "<div class='response yes'>YES! <a href='#'>(read more)</a></div>"
     ];    
     Array.prototype.inArray = function(needle) {
       var exists = false;
@@ -64,10 +64,8 @@ $(function() {
       });   
     };
 
-    $.post("http://localhost:8000", {url: $uri.toString()}, function(data) {
-      inject(responses[
-        data.status == 9 ? 3 : data.status
-      ]);
+    $.post(document.href, {url: $uri.toString()}, function(data) {
+      inject(responses[data.status]);
     });
  
   };

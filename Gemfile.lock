@@ -18,6 +18,7 @@ GEM
     json (1.8.1)
     less (2.4.0)
       commonjs (~> 0.2.7)
+    libv8 (3.16.14.3)
     mime-types (2.0)
     mini_portile (0.5.1)
     multi_json (1.8.2)
@@ -28,6 +29,7 @@ GEM
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
+    ref (1.0.5)
     refining (0.0.5.5)
     rest-client (1.6.7)
       mime-types (>= 1.16)
@@ -52,6 +54,9 @@ GEM
       ffi-extra
       ffi-inline
       iso-639
+    therubyracer (0.12.0)
+      libv8 (~> 3.16.14.0)
+      ref
     thin (1.6.1)
       daemons (>= 1.0.9)
       eventmachine (>= 1.0.0)
@@ -73,6 +78,7 @@ DEPENDENCIES
   sinatra-assetpack
   sinatra-contrib
   tesseract-ocr
+  therubyracer
   thin
   unirest
   yui-compressor

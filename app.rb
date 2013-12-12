@@ -4,6 +4,7 @@ require 'less'
 require 'uri'
 require 'open-uri'
 require 'unirest'
+require 'net/http'
 require 'nokogiri'
 require 'sinatra/assetpack'
 
@@ -57,10 +58,10 @@ class App < Sinatra::Base
   post '/' do
     # status safety codes
     codes = {
-      :OK       => 0,
+      :OK       => 3,
       :MAYBE    => 1,
       :NOT_SURE => 2,
-      :NO       => 9
+      :NO       => 0
     }
     # valid images
     image = [
@@ -86,28 +87,39 @@ class App < Sinatra::Base
     "xcodeproj", "bak", "tmp", "crdownload", "ics", "msi", "part", "torrent"
   ];
 
-    uri   = URI(params[:url])
+  uri    = URI(params[:url])
 
-    
-    suffix = File.extname(uri.path).slice(1, File.extname(uri.path).length)
+  # 0) first let's see if this URL is even real
+  begin
+    req    = Net::HTTP.new(uri.host, uri.port)
+    req.use_ssl = true if uri.scheme == "https"
+    res    = req.request_head(uri.path)
+  rescue Exception
+    return json :status => codes[:NOT_SURE]
+  end
+
+  return json :status => codes[:NOT_SURE] unless res.code == "200"
+  
+  suffix = File.extname(uri.path).slice(1, File.extname(uri.path).length)
 
   # 1) determine priority of content analysis via information type
     # rule out bad files first
-  if bad_files.include? suffix
+  if bad_files.include? suffix.downcase
     return json :status => codes[:NOT_SURE] 
   end
-
-  if image.include? suffix
+  # images
+  if image.include? suffix.downcase
     Unirest.timeout(15)
     escaped  = URI.escape(uri.to_s, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
-    response = Unirest::get "https://nds.p.mashape.com/?url=" << URI.escape("http://i.embed.ly/1/image/resize?url=" << escaped << "&key=92b31102528511e1a2ec4040d3dc5c07&width=300&height=300", Regexp.new("[^#{URI::PATTERN::UNRESERVED}]")), 
+    response = Unirest::get "https://nds.p.mashape.com/?url=" << URI.escape("http://i.embed.ly/1/image/resize?url=" << escaped << "&key=92b31102528511e1a2ec4040d3dc5c07&width=400&height=400", Regexp.new("[^#{URI::PATTERN::UNRESERVED}]")), 
       headers: { 
         "X-Mashape-Authorization" => "oDpSINvANRazu7Yi9772wDrcaeHsYKMN"
       }
     data = response.body
-    if data["is_nude"]
+
+    if data["is_nude"]    == 'true'
       json :status => codes[:NO]
-    else
+    elsif data["is_nude"] == 'false'
       json :status => codes[:OK]
     end
   end

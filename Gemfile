@@ -13,6 +13,7 @@ gem 'sinatra-contrib'
 gem 'nokogiri'
 
 # assets
+gem 'therubyracer'
 gem 'less'
 gem 'sinatra-assetpack', :require => 'sinatra/assetpack'
 gem 'yui-compressor',    :require => 'yui/compressor'

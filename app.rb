@@ -50,10 +50,10 @@ class App < Sinatra::Base
   # 2) check meta-tags: description, author, keywords, et al if applicable
   # 3) analyze content
   # 4) return status code (safety level)
-     # 0) (200): OK (YES)
+     # 3) (200): OK (YES)
      # 1) Maybe
      # 2) Not Sure
-     # 9) NO
+     # 0) NO
 
   post '/' do
     # status safety codes
@@ -111,7 +111,7 @@ class App < Sinatra::Base
   if image.include? suffix.downcase
     Unirest.timeout(15)
     escaped  = URI.escape(uri.to_s, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
-    response = Unirest::get "https://nds.p.mashape.com/?url=" << URI.escape("http://i.embed.ly/1/image/resize?url=" << escaped << "&key=92b31102528511e1a2ec4040d3dc5c07&width=400&height=400", Regexp.new("[^#{URI::PATTERN::UNRESERVED}]")), 
+    response = Unirest::get "https://nds.p.mashape.com/?url=" << URI.escape("http://i.embed.ly/1/image/resize?url=" << escaped << "&key=92b31102528511e1a2ec4040d3dc5c07&width=600&height=500", Regexp.new("[^#{URI::PATTERN::UNRESERVED}]")), 
       headers: { 
         "X-Mashape-Authorization" => "oDpSINvANRazu7Yi9772wDrcaeHsYKMN"
       }

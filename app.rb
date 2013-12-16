@@ -111,7 +111,7 @@ class App < Sinatra::Base
         json :status => safety_level
       end
     end
-
+ 
     uri = URI(params[:url].end_with?('/') ? params[:url] : params[:url] << '/')
 
     # 0) let's see if this URL is even real
@@ -188,9 +188,10 @@ class App < Sinatra::Base
         safety_level == codes[:NOT_SURE]
         return send! safety_level
       end
+
+
       # if it was a file that was OK, maybe
       # otherwise yes.
-
     if safety_level == codes[:MAYBE] && suffix.nil?
       safety_level = codes[:OK]
     end

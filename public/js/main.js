@@ -39,7 +39,7 @@ $(function() {
       "<div class='response not-sure'>NOT SURE! <a href='#'>(why?)</a></div>",
       "<div class='response yes'>YES! <a href='#'>(read more)</a></div>",
      
-      "<div class='response no'>ERROR! <a href='#'>(please try again later)</a></div>"
+      "<div class='response no'>ERROR! <a href='#'>(please try again)</a></div>"
     ];    
     Array.prototype.inArray = function(needle) {
       var exists = false;
@@ -65,11 +65,18 @@ $(function() {
         });
       });   
     };
-
-    $.post(document.href, {async: true, url: $uri.toString()}, function(data) {
-      inject(responses[data.status]);
-    });
- 
+    $.ajax({
+      url:      document.href,
+      type:     "POST",
+      dataType: 'json',
+      data:     {async: true, url: $uri.toString()},
+      timeout:  15 * 1000,
+      dataType: 'json',
+    }).done(function(data) {
+      inject(responses[data.status]);      
+    }).fail(function() {
+      inject(responses[4]);
+    }); 
   };
   /* end of Response function */
 
@@ -120,7 +127,8 @@ $(function() {
       var self = this;
       $('#box').animate({top: '0'}, 'slow');
       $('.response').remove();
-      var errors = $('#search').val().length === 0 || $(self).hasClass('error');
+      var errors = $('#search').val().length === 0 || $('.button').hasClass('error');
+      console.log(errors);
       if (!errors) {
         $('#animate').animate({
           left: "20px"

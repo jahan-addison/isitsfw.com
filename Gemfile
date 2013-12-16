@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.0.0'
+ruby '1.9.3'
 
 # platform
 gem 'sinatra'
@@ -8,9 +8,10 @@ gem 'thin'
 
 # deps
 gem 'tesseract-ocr'
-gem 'unirest'
+gem 'sinatra-flash'
 gem 'sinatra-contrib'
 gem 'nokogiri'
+gem 'rack-flash', '0.1.2'
 
 # assets
 gem 'therubyracer'

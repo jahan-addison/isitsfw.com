@@ -84,6 +84,9 @@ body {
 
 main {
   .response {
+    &.force {
+      position: relative !important;
+    }
     a {
       position:relative;
       top:-10px;
@@ -116,7 +119,7 @@ main {
       margin-left:10px;
       margin-top:6px;
     }
-    input {
+    input#search {
       padding:0 5px;
     }
     #search {
@@ -131,10 +134,10 @@ main {
       }
       height: 37px;
     }
-    input, button {
+    input, button, .button {
       margin-top:-8px;
     }
-    button {
+    button, .button {
       &.error {
         .transition(0.17s);
         background: @red;

@@ -37,7 +37,9 @@ $(function() {
       "<div class='response no'>NO! <a href='#'>(why?)</a></div>",
       "<div class='response maybe'>MAYBE? <a href='#'>(why)</a></div>",
       "<div class='response not-sure'>NOT SURE! <a href='#'>(why?)</a></div>",
-      "<div class='response yes'>YES! <a href='#'>(read more)</a></div>"
+      "<div class='response yes'>YES! <a href='#'>(read more)</a></div>",
+     
+      "<div class='response no'>ERROR! <a href='#'>(please try again later)</a></div>"
     ];    
     Array.prototype.inArray = function(needle) {
       var exists = false;
@@ -64,7 +66,7 @@ $(function() {
       });   
     };
 
-    $.post(document.href, {url: $uri.toString()}, function(data) {
+    $.post(document.href, {async: true, url: $uri.toString()}, function(data) {
       inject(responses[data.status]);
     });
  
@@ -75,10 +77,6 @@ $(function() {
   (function(window, document) {
     $('#search').on('keyup blur focusout', function(e) {
         $(this).next().attr('style', '');
-        if (e.which === 13) {
-          $('#search + button').click();
-          return false;
-        }
         var url   = window.$uri = new URI($(this).val());
         var proto = url._parts.protocol,
           host    = url._parts.domain,
@@ -96,7 +94,7 @@ $(function() {
       }
     });
     // the empty case
-    $('#search + button').click(function() {
+    $('#search + .button').click(function() {
       if ($(this).prev().val().length === 0) {
         var self = this;
         $(self).css('background', '#e74c3c');
@@ -117,7 +115,8 @@ $(function() {
       '<li></li>',
       '</ul>'
     ].join("\n");
-    $('#search + button').click(function() {
+    $('form').submit(function(e) {
+      e.preventDefault();
       var self = this;
       $('#box').animate({top: '0'}, 'slow');
       $('.response').remove();

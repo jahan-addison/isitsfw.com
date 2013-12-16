@@ -1,7 +1,4 @@
 def fetch(uri)
-  # You should choose better exception.
-  raise ArgumentError, 'HTTP redirect too deep' if limit == 0
-
   req          = Net::HTTP.new(uri.host, uri.port)
   req.use_ssl  = true if uri.scheme == "https"
   response     = req.request_head(uri.path)

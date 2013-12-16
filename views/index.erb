@@ -16,13 +16,16 @@
       <div id="wrapper">
         <main>
           <header><img src="/img/title.png" alt="title" /></header>
+          <%= flash[:notice] %>
           <section id="box">
             <div class="container">
               <p>Well, is it?</p>
               <div class="loading"> </div>
               <div id="animate">
-                <input placeholder="let's see" type="text" name="search" id="search" />
-                <button><span>search</span></button>
+                <form method="post" action="">
+                  <input placeholder="let's see" type="text" name="url" id="search" />
+                  <input type="submit" class="button" value="search" name="submit" />
+                </form>
               </div>
             </div>
           </section>

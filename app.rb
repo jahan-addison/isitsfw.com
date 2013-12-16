@@ -3,22 +3,26 @@ require 'sinatra/json'
 require 'less'
 require 'uri'
 require 'open-uri'
-require 'unirest'
+require 'rest-client'
 require 'net/http'
 require 'nokogiri'
 require 'sinatra/assetpack'
+require 'sinatra/flash'
 
 require './lib/fetch_helper'
 
 class App < Sinatra::Base
   set :environment, :development
+
+  enable :sessions
+
   set :root, File.dirname(__FILE__)
   set :bind, '0.0.0.0'
   set :port, 8000
   Less.paths <<  "#{App.root}/public/css" 
 
   register Sinatra::AssetPack
-
+  register Sinatra::Flash
 
   assets {
     serve '/js',     from: 'public/js'        # Default
@@ -40,8 +44,6 @@ class App < Sinatra::Base
     js_compression  :yui  
     css_compression :yui 
   }
-
-  # todo: accept parameter
 
   get '/' do
     erb :index
@@ -93,7 +95,24 @@ class App < Sinatra::Base
       "xcodeproj", "bak", "tmp", "crdownload", "ics", "msi", "part", "torrent"
     ];
 
-    uri = URI(params[:url])
+    # response helper for graceful degradation
+    def send!(safety_level)
+      if params[:async].nil?
+        responses      = [
+          "<div class='response no force'>NO! <a href='#'>(why?)</a></div>",
+          "<div class='response maybe force'>MAYBE? <a href='#'>(why)</a></div>",
+          "<div class='response not-sure force'>NOT SURE! <a href='#'>(why?)</a></div>",
+          "<div class='response yes force'>YES! <a href='#'>(read more)</a></div>"
+        ];
+        flash[:notice] = responses[safety_level] 
+        redirect '/'
+      else
+        # async call
+        json :status => safety_level
+      end
+    end
+
+    uri = URI(params[:url].end_with?('/') ? params[:url] : params[:url] << '/')
 
     # 0) let's see if this URL is even real
     begin
@@ -101,15 +120,13 @@ class App < Sinatra::Base
     rescue Exception
       safety_level = codes[:NOT_SURE]
       # emergancy halt
-      return json :status => safety_level
+      return send! safety_level
     end
     
-    puts res.code
-
     safety_level = codes[:NOT_SURE] unless res.code == "200"
     if safety_level == codes[:NOT_SURE]
       # emergancy halt
-      return json :status => safety_level
+      return send! safety_level
     end
 
     suffix = File.extname(uri.path).slice(1, File.extname(uri.path).length)
@@ -122,14 +139,11 @@ class App < Sinatra::Base
       end
         # images
       if image.include? suffix.downcase
-        Unirest.timeout(15)
         escaped  = URI.escape(uri.to_s, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
-        response = Unirest::get "https://nds.p.mashape.com/?url=" << URI.escape("http://i.embed.ly/1/image/resize?url=" << escaped << "&key=92b31102528511e1a2ec4040d3dc5c07&width=600&height=500", Regexp.new("[^#{URI::PATTERN::UNRESERVED}]")), 
-          headers: { 
-            "X-Mashape-Authorization" => "oDpSINvANRazu7Yi9772wDrcaeHsYKMN"
-          }
-        data = response.body
-
+        url      = "https://nds.p.mashape.com/?url=" << URI.escape("http://i.embed.ly/1/image/resize?url=" << escaped << "&key=92b31102528511e1a2ec4040d3dc5c07&width=600&height=500", Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+        response = RestClient::Request.execute(:method => :get, :url => url, :timeout => 15, :open_timeout => 15, :headers => {
+          "X-Mashape-Authorization" => "oDpSINvANRazu7Yi9772wDrcaeHsYKMN"})
+        data = JSON.parse(response.body)
         if data["is_nude"]    == 'true'
           safety_level = codes[:NO]
         elsif data["is_nude"] == 'false'
@@ -137,7 +151,6 @@ class App < Sinatra::Base
         end
       end
     end
-    
     # 2) check meta-tags: description, author, keywords, et al if applicable
       # load up our list of "naughty words"
     fd            = File.open("lib/bad_words.txt")
@@ -173,7 +186,7 @@ class App < Sinatra::Base
       rescue Exception
         # emergancy halt
         safety_level == codes[:NOT_SURE]
-        return json :status => safety_level
+        return send! safety_level
       end
       # if it was a file that was OK, maybe
       # otherwise yes.
@@ -181,8 +194,8 @@ class App < Sinatra::Base
     if safety_level == codes[:MAYBE] && suffix.nil?
       safety_level = codes[:OK]
     end
-    
-    return json :status => safety_level
+
+    return send! safety_level
 
   end
 

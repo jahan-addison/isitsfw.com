@@ -35,7 +35,7 @@ $(function() {
   var $response = function() {
     var responses           = [
       "<div class='response no'>NO! <a href='#'>(why?)</a></div>",
-      "<div class='response maybe'>MAYBE? <a href='#'>(more options)</a></div>",
+      "<div class='response maybe'>MAYBE? <a href='#'>(why)</a></div>",
       "<div class='response not-sure'>NOT SURE! <a href='#'>(why?)</a></div>",
       "<div class='response yes'>YES! <a href='#'>(read more)</a></div>"
     ];    

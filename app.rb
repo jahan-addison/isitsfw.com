@@ -99,7 +99,6 @@ class App < Sinatra::Base
     begin
       res = fetch(uri)
     rescue Exception
-      puts e.message
       safety_level = codes[:NOT_SURE]
       # emergancy halt
       return json :status => safety_level

@@ -128,7 +128,7 @@ $(function() {
         }, 400, function() {
           $('.loading').html(spinner)
             .fadeIn(1000);
-          window.setTimeout($response, 1000);
+          $response();
         });
       }
     });

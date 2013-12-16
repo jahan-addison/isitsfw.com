@@ -128,7 +128,6 @@ $(function() {
       $('#box').animate({top: '0'}, 'slow');
       $('.response').remove();
       var errors = $('#search').val().length === 0 || $('.button').hasClass('error');
-      console.log(errors);
       if (!errors) {
         $('#animate').animate({
           left: "20px"

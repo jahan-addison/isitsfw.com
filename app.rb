@@ -102,7 +102,7 @@ class App < Sinatra::Base
           "<div class='response no force'>NO! <a href='#'>(why?)</a></div>",
           "<div class='response maybe force'>MAYBE? <a href='#'>(why)</a></div>",
           "<div class='response not-sure force'>NOT SURE! <a href='#'>(why?)</a></div>",
-          "<div class='response yes force'>YES! <a href='#'>(read more)</a></div>"
+          "<div class='response yes force'>YES!</div>"
         ];
         flash[:notice] = responses[safety_level] 
         redirect '/'

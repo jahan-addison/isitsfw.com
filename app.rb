@@ -150,11 +150,11 @@ class App < Sinatra::Base
   scan.concat uri.to_s.split(/\+|_|%20|\s|\-/)
 
   # 3) analyze content
-
-  scan.each { |x|
-    safety_level = codes[:NO] if naughty_words.include? x.downcase
+  scan.map!{|x| x.downcase}
+  naughty_words.each { |x|
+    safety_level = codes[:NO] if scan.include? x.downcase
+    safety_level = codes[:NO] if uri.host.downcase.include? x
   }
-
 
   # 4) return status code (safety level)
     # special case (youtube.com)
@@ -164,7 +164,7 @@ class App < Sinatra::Base
     end
     
     # if it was a file that was OK, maybe
-    # otherwise likely yes.
+    # otherwise yes.
   if safety_level == codes[:MAYBE] && suffix.nil?
     safety_level = codes[:OK]
   end

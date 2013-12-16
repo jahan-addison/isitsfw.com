@@ -1,4 +1,4 @@
-def fetch(uri, limit = 10)
+def fetch(uri)
   # You should choose better exception.
   raise ArgumentError, 'HTTP redirect too deep' if limit == 0
 

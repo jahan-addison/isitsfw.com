@@ -97,8 +97,8 @@ class App < Sinatra::Base
 
     # 0) let's see if this URL is even real
     begin
-      res = fetch(uri, 2)
-    rescue Exception => e
+      res = fetch(uri)
+    rescue Exception
       puts e.message
       safety_level = codes[:NOT_SURE]
       # emergancy halt

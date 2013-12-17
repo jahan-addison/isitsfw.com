@@ -145,11 +145,12 @@ EOF
         json :status => safety_level
       end
     end
- 
+    # we REQUIRE a scheme
+    params[:url] = "http://" << params[:url] unless params[:url].match(/^https?\:\/{2}/)
     uri = URI(params[:url])
 
     # we REQUIRE a path
-    uri.path = '/' if uri.path.empty?
+    uri.path   = '/'    if uri.path.empty?
 
     # 0) let's see if this URL is even real
     begin

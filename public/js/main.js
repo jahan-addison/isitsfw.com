@@ -2,6 +2,20 @@ $(function() {
 
   window.$uri = undefined;
 
+  Array.inside = function (haystack, needle) {
+    for (var i = 0; i < haystack.length; i++) {
+      if (typeof haystack[i] === "object") {
+        if (Array.inside(haystack[i], needle)) {
+          return true;
+        }
+      }
+      if (haystack[i] == needle) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   /* Lightbox function */
   var $lightbox = function(contents, width, height) {
     var width  = width  || 600;
@@ -41,15 +55,6 @@ $(function() {
      
       "<div class='response no'>ERROR! <a href='/'>(please try again)</a></div>"
     ];    
-    Array.prototype.inArray = function(needle) {
-      var exists = false;
-      this.forEach(function(e) {
-        if (e === needle) {
-          exists = true;
-        }
-      });
-      return exists;
-    };
 
     var images   = ['jpg', 'jpeg', 'png', 'bmp', 'gif', 'tiff'];
         filename = $uri.filename() || undefined;
@@ -91,6 +96,22 @@ $(function() {
           errors  = false;
       if (proto && !proto.match(/^https?$/)) { 
         errors = true; 
+      }
+      // prefix tree
+      var trie  = [
+        'h', 'ht', 'htt', 'http', 
+          ['https', 'https:', 'https:/', 'https://'], 
+          ['http:', 'http:/', 'http://']
+      ];
+      var str    = $(this).val(),
+          self   = this;
+      if (str.length && !str.match(/^https?\:\/{2}/) ) { 
+        if (!Array.inside(trie, str.substr(0, 'https://'.length))) {
+          $(self).val("http://" + str);
+          window.setTimeout(function() {
+            $(self).trigger('keyup');
+          }, 200);
+        }
       }
       if (!url.is('absolute')) { errors = true; }
       if (!url.is('url')) { errors      = true; }

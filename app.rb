@@ -49,6 +49,31 @@ class App < Sinatra::Base
     erb :index
   end
 
+  get %r{/status/(\byes\b|\bnot\_sure\b|\bno\b|\bmaybe\b)$} do
+    status  = params[:captures].first
+    message = case 
+      when status === "yes"
+        "The location or file passed the scanner algorithms with flying colors! Please continue to be cautious of links from whom you do not trust."
+      when status === "no"
+        "If a site or link qualified as 'no,' there is no doubt as the scanners search through " <<
+        "metadata and other informative details that prescribes the content thereof. " <<
+        "If the URL was an image, the scanner <span class='red'>NEVER</span> has false-positives. However there are rare cases wherein close-up shots trigger the skin algorithms. "
+      when status === "maybe"
+        "This particularly happens when an OK file was scanned, however its contents were 'plain text' -- and likely safe."
+      when status === "not_sure"
+        "This could mean a couple of things. There could have been an error with the URL itself (e.g. non-existent, 404 not found, etc); or an error with the " <<
+        "internal system itself during the scan. It's likely the former, though."
+    end
+
+    if !params[:async].nil?
+      message << "<br /> <a onclick='javascript:void();' class='close'> Close </a> "
+      json :message => message
+    else
+      message << "<br /> <a href='/'> Return back </a> "
+      erb :page, :locals => {:message => message}
+    end
+  end
+
   ##
   # 1) determine priority of content analysis via information type
   # 2) check meta-tags: description, author, keywords, et al if applicable
@@ -99,10 +124,10 @@ class App < Sinatra::Base
     def send!(safety_level)
       if params[:async].nil?
         responses      = [
-          "<div class='response no force'>NO! <a href='#'>(why?)</a></div>",
-          "<div class='response maybe force'>MAYBE? <a href='#'>(why)</a></div>",
-          "<div class='response not-sure force'>NOT SURE! <a href='#'>(why?)</a></div>",
-          "<div class='response yes force'>YES!</div>"
+          "<div class='response no force'>NO! <a href='/status/no'>(why?)</a></div>",
+          "<div class='response maybe force'>MAYBE? <a href='/status/maybe'>(why)</a></div>",
+          "<div class='response not-sure force'>NOT SURE! <a href='/status/not_sure'>(why?)</a></div>",
+          "<div class='response yes force'>YES! <a href='/status/yes'>(read more)</a></div>"
         ];
         flash[:notice] = responses[safety_level] 
         redirect '/'
@@ -112,7 +137,10 @@ class App < Sinatra::Base
       end
     end
  
-    uri = URI(params[:url].end_with?('/') ? params[:url] : params[:url] << '/')
+    uri = URI(params[:url])
+
+    # we REQUIRE a path
+    uri.path = '/' if uri.path.empty?
 
     # 0) let's see if this URL is even real
     begin
@@ -188,7 +216,6 @@ class App < Sinatra::Base
         safety_level == codes[:NOT_SURE]
         return send! safety_level
       end
-
 
       # if it was a file that was OK, maybe
       # otherwise yes.

@@ -34,12 +34,12 @@ $(function() {
   /* Response function */
   var $response = function() {
     var responses           = [
-      "<div class='response no'>NO! <a href='#'>(why?)</a></div>",
-      "<div class='response maybe'>MAYBE? <a href='#'>(why)</a></div>",
-      "<div class='response not-sure'>NOT SURE! <a href='#'>(why?)</a></div>",
-      "<div class='response yes'>YES! <a href='#'>(read more)</a></div>",
+      "<div class='response no'>NO! <a href='/status/no'>(why?)</a></div>",
+      "<div class='response maybe'>MAYBE? <a href='/status/maybe'>(why)</a></div>",
+      "<div class='response not-sure'>NOT SURE! <a href='/status/not_sure'>(why?)</a></div>",
+      "<div class='response yes'>YES! <a href='/status/yes'>(read more)</a></div>",
      
-      "<div class='response no'>ERROR! <a href='#'>(please try again)</a></div>"
+      "<div class='response no'>ERROR! <a onclick='javascript:void(0);'>(please try again)</a></div>"
     ];    
     Array.prototype.inArray = function(needle) {
       var exists = false;
@@ -50,6 +50,7 @@ $(function() {
       });
       return exists;
     };
+
     var images   = ['jpg', 'jpeg', 'png', 'bmp', 'gif', 'tiff'];
         filename = $uri.filename() || undefined;
     var ext      = $uri.suffix()   || undefined;

@@ -17,6 +17,7 @@ GEM
     less (2.4.0)
       commonjs (~> 0.2.7)
     libv8 (3.16.14.3)
+    mime-types (2.0)
     mini_portile (0.5.1)
     multi_json (1.8.2)
     nokogiri (1.6.0)
@@ -30,6 +31,8 @@ GEM
       rack (>= 1.0)
     ref (1.0.5)
     refining (0.0.5.5)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
     sinatra (1.4.4)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -70,6 +73,7 @@ DEPENDENCIES
   less
   nokogiri
   rack-flash (= 0.1.2)
+  rest-client
   sinatra
   sinatra-assetpack
   sinatra-contrib

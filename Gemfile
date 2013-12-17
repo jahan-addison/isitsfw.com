@@ -11,6 +11,7 @@ gem 'tesseract-ocr'
 gem 'sinatra-flash'
 gem 'sinatra-contrib'
 gem 'nokogiri'
+gem 'rest-client'
 gem 'rack-flash', '0.1.2'
 
 # assets

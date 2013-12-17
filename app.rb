@@ -65,13 +65,12 @@ EOF
       when status === "yes"
         "The location or file passed the scanner algorithms with flying colors! Please continue to be cautious of links from whom you do not trust."
       when status === "no"
-        "If a link qualified as 'no,' there is no doubt as the scanners search through " <<
-        "metadata and other informative details that prescribes the content thereof. " <<
-        "If the URL was an image, the scanner <span class='red'>NEVER</span> has false-positives. However there are rare cases wherein close-up shots trigger the skin algorithms. "
+        "The scanner algorithms search through metadata and other informative details that prescribe the content thereof; in the case of files such " <<
+        "as images, decisive skin analytic algorithms were triggered and it is <span class='red'>best</span> to avoid. "
       when status === "maybe"
         "This particularly happens when an OK file was scanned, however its contents were 'plain text' -- and likely safe."
       when status === "not_sure"
-        "This could mean a couple of things. There could have been an error with the URL itself (e.g. non-existent, 404 not found, etc); or an error with the " <<
+        "This could mean a couple of things. There could have been an error with the URL (e.g. non-existent, 404 not found, etc); or an error with the " <<
         "internal system itself during the scan. It's likely the former, though."
     end
 

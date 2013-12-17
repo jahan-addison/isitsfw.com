@@ -82,22 +82,19 @@ $(function() {
       inject(responses[data.status]);      
     }).fail(function() {
       inject(responses[4]);
-    }); 
+    }).always(function() {
+      window.setTimeout(function() {
+        running = false;        
+      }, 3000)
+    })
   };
   /* end of Response function */
 
   /* URI Validation */
   (function(window, document) {
     $('#search').on('keyup blur focusout', function(e) {
-        $(this).next().attr('style', '');
-        var url   = window.$uri = new URI($(this).val());
-        var proto = url._parts.protocol,
-          host    = url._parts.domain,
-          errors  = false;
-      if (proto && !proto.match(/^https?$/)) { 
-        errors = true; 
-      }
       // prefix tree
+      /*
       var trie  = [
         'h', 'ht', 'htt', 'http', 
           ['https', 'https:', 'https:/', 'https://'], 
@@ -113,29 +110,20 @@ $(function() {
           }, 200);
         }
       }
-      if (!url.is('absolute')) { errors = true; }
-      if (!url.is('url')) { errors      = true; }
-
+      */
+      /*
       if ($(this).val().length > 0 && errors == true) {
         $(this).next().addClass('error');
       } else {
         $(this).next().removeClass('error');
       }
-    });
-    // the empty case
-    $('#search + .button').click(function() {
-      if ($(this).prev().val().length === 0) {
-        var self = this;
-        $(self).css('background', '#e74c3c');
-        window.setTimeout(function() {
-          $(self).css('background', '#2980b9');
-        }, 900);
-      }
+      */
     });
   })(window, document);
   /* End of URI Validation */
 
   /* Submit */
+  var running = false;
   (function() {
     var spinner = ['<ul class="spinner">',
       '<li></li>',
@@ -146,10 +134,38 @@ $(function() {
     ].join("\n");
     $('form').submit(function(e) {
       e.preventDefault();
-      var self = this;
+      if (running) {
+        return false;
+      }
+      var input = $('#search');
       $('#box').animate({top: '0'}, 'slow');
       $('.response').remove();
-      var errors = $('#search').val().length === 0 || $('.button').hasClass('error');
+      if (input.val().length === 0) {
+        $('.button').css('background', '#e74c3c');
+        window.setTimeout(function() {
+          $('.button').css('background', '#2980b9');
+        }, 900);
+        return false;
+      }
+      running = true;
+      if (!input.val().match(/^https?\:\/\//)) {
+        input.val("http://" + input.val());
+      }
+      var errors = false;
+      var url    = window.$uri = new URI(input.val());
+      var proto = url._parts.protocol,
+          host    = url._parts.domain;
+      if (!url.is('absolute')) { errors = true; }
+      if (!url.is('url')) { errors      = true; }
+      if (errors) {
+        running = false;
+        $('.button').css('background', '#e74c3c');
+        window.setTimeout(function() {
+          $('.button').css('background', '#2980b9');
+        }, 900);
+        return false;
+      }
+      var self = this;
       if (!errors) {
         $('#animate').animate({
           left: "20px"
@@ -159,6 +175,7 @@ $(function() {
           $response();
         });
       }
+      return false;
     });
   })();
   /* end of Search */;

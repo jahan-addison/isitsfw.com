@@ -49,6 +49,16 @@ class App < Sinatra::Base
     erb :index
   end
 
+  get '/about' do
+    message = <<EOF
+Isitsfw.com is a service for employees who work in front of a screen, like me. There are times when we stumble upon links or are sent links through email or some other chat protocol. We <span class="red">MUST</span> be cautious and at all cost know the safety of whether or not a link, image, WHATEVER is SFW.
+<br /><br />
+My name is <a href="http://www.twitter.com/_jahan_">Jahan</a>, I am currently a Front-End Web Developer for Media Matters for America, based in Washington, D.C. 
+<br /> <a class='return' href='/'> Return back </a> 
+EOF
+    erb :page, :locals => {:message => message}
+  end
+  
   get %r{/status/(\byes\b|\bnot\_sure\b|\bno\b|\bmaybe\b)$} do
     status  = params[:captures].first
     message = case 
@@ -69,7 +79,7 @@ class App < Sinatra::Base
       message << "<br /> <a onclick='javascript:void();' class='close'> Close </a> "
       json :message => message
     else
-      message << "<br /> <a href='/'> Return back </a> "
+      message << "<br /> <a class='return' href='/'> Return back </a> "
       erb :page, :locals => {:message => message}
     end
   end

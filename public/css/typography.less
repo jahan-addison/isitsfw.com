@@ -29,7 +29,10 @@ main {
     font-size:1.12em;
     a {
       position: relative;
-      top: 10px;
+      &.return {
+        position: relative;
+        top: 10px;
+      }
       color: @red;
       text-decoration:none;
       &:hover {

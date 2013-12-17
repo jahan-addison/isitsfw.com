@@ -51,7 +51,7 @@ class App < Sinatra::Base
 
   get '/about' do
     message = <<EOF
-Isitsfw.com is a service for employees who work in front of a screen, like me. There are times when we stumble upon links or are sent links through email or some other chat protocol. We <span class="red">MUST</span> be cautious and at all cost know the safety of whether or not a link, image, WHATEVER is SFW.
+Isitsfw.com is a service for employees who work in front of a screen, like me. There are times when we stumble upon links or are sent links through email or some other chat protocol. We <span class="red">MUST</span> be cautious and at all cost know the safety of whether or not a link, image, video, <u>WHATEVER</u> is SFW.
 <br /><br />
 My name is <a href="http://www.twitter.com/_jahan_">Jahan</a>, I am currently a Front-End Web Developer for Media Matters for America, based in Washington, D.C. 
 <br /> <a class='return' href='/'> Return back </a> 
@@ -65,7 +65,7 @@ EOF
       when status === "yes"
         "The location or file passed the scanner algorithms with flying colors! Please continue to be cautious of links from whom you do not trust."
       when status === "no"
-        "If a site or link qualified as 'no,' there is no doubt as the scanners search through " <<
+        "If a link qualified as 'no,' there is no doubt as the scanners search through " <<
         "metadata and other informative details that prescribes the content thereof. " <<
         "If the URL was an image, the scanner <span class='red'>NEVER</span> has false-positives. However there are rare cases wherein close-up shots trigger the skin algorithms. "
       when status === "maybe"

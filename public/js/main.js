@@ -39,7 +39,7 @@ $(function() {
       "<div class='response not-sure'>NOT SURE! <a href='/status/not_sure'>(why?)</a></div>",
       "<div class='response yes'>YES! <a href='/status/yes'>(read more)</a></div>",
      
-      "<div class='response no'>ERROR! <a onclick='javascript:void(0);'>(please try again)</a></div>"
+      "<div class='response no'>ERROR! <a href='/'>(please try again)</a></div>"
     ];    
     Array.prototype.inArray = function(needle) {
       var exists = false;

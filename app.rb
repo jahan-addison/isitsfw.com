@@ -227,8 +227,8 @@ EOF
         return send! safety_level
       end
 
-      # if it was a file that was OK, maybe
-      # otherwise yes.
+        # if it was a file that was OK, maybe
+        # otherwise yes.
     if safety_level == codes[:MAYBE] && suffix.nil?
       safety_level = codes[:OK]
     end

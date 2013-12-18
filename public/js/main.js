@@ -1,5 +1,8 @@
 $(function() {
-
+  if ($('.lte8').length) {
+    return false;
+  }
+  
   window.$uri = undefined;
 
   Array.inside = function (haystack, needle) {

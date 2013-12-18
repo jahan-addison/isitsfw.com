@@ -46,9 +46,9 @@ class App < Sinatra::Base
   }
 
   # test server
-  get '/test/*/*.*' do |path, file, ext|
-    send_file File.join(File.expand_path(File.dirname(__FILE__) << '/tests/' << path), file.slice(0, file.length) <<  '.' << ext )
-  end
+  #get '/test/*/*.*' do |path, file, ext|
+  #  send_file File.join(File.expand_path(File.dirname(__FILE__) << '/tests/' << path), file.slice(0, file.length) <<  '.' << ext )
+  #end
   
   get '/' do
     erb :index

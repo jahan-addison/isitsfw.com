@@ -163,12 +163,13 @@ main {
         border:none;
       }
     }
-    .ie8 & {
-      background: @black;
-    }
     background: fadeout(@black, 84%);
     .rounded(5px);
     width:546px;
     height:103px;
   }
+}
+
+.ie8 #box {
+  background: @black !important;
 }

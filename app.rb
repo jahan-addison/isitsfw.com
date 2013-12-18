@@ -183,7 +183,7 @@ EOF
         # images
       if image.include? suffix.downcase
         escaped  = URI.escape(uri.to_s, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
-        url      = "https://nds.p.mashape.com/?url=" << URI.escape("http://i.embed.ly/1/image/resize?url=" << escaped << "&key=c814a1d73fcc48ccab27c8830d92f26b&width=600&height=500", Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+        url      = "https://nds.p.mashape.com/?url=" << URI.escape("http://i.embed.ly/1/image/resize?url=" << escaped << "&key=c814a1d73fcc48ccab27c8830d92f26b&width=700&height=600", Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
         response = RestClient::Request.execute(:method => :get, :url => url, :timeout => 15, :open_timeout => 15, :headers => {
           "X-Mashape-Authorization" => "oDpSINvANRazu7Yi9772wDrcaeHsYKMN"})
         data = JSON.parse(response.body)

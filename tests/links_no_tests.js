@@ -17,7 +17,6 @@ describe('NO', function() {
         describe('file', function(){
           it('should return status code 0', function(done){
             this.timeout(15000);
-            console.log(line);
             rest.post('http://isitsfw.com:8000', {
               data: { async: true, url: encodeURI(line) }, timeout: 15000
             }).on('complete', function(data, response) {

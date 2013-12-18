@@ -1,0 +1,9 @@
+{
+  "name": "test-suite" ,
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*",
+    "restler": "*",
+    "chai": "*"
+  }
+}

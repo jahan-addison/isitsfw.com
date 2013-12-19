@@ -8,8 +8,12 @@ require 'net/http'
 require 'nokogiri'
 require 'sinatra/assetpack'
 require 'sinatra/flash'
-
+require './environments'
 require './lib/fetch_helper'
+
+class Image < ActiveRecord::Base
+  validates :hash, presence: true
+end
 
 class App < Sinatra::Base
   set :environment, :development

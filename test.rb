@@ -3,19 +3,33 @@ require 'digest/sha1'
 require 'open-uri'
 include Magick
 
-escaped = 'http://i.imgur.com/qJqyaxI.jpg'
+escaped = 'http://i.imgur.com/QKqWyHS.jpg'
 
-url      = "http://i.embed.ly/1/image/resize?url=" << escaped << "&key=c814a1d73fcc48ccab27c8830d92f26b&width=30&height=30"
+url      = "http://i.embed.ly/1/image/resize?url=" << escaped << "&key=c814a1d73fcc48ccab27c8830d92f26b&width=80&height=80"
 
-escaped = 'http://s8.postimg.org/wxpb6nu91/q_Jqyax_I.jpg'
+escaped = 'http://i.imgur.com/QKqWyHS.jpg'
 
-url2    =  "http://i.embed.ly/1/image/resize?url=" << escaped << "&key=c814a1d73fcc48ccab27c8830d92f26b&width=30&height=30"
-
-image = Magick::Image.from_blob(open(url).read).first
-
-image = Magick::Image.from_blob(open(url2).read).first
+url2    =  "http://i.embed.ly/1/image/resize?url=" << escaped << "&key=c814a1d73fcc48ccab27c8830d92f26b&width=80&height=80"
 
 
-puts Digest::SHA1.hexdigest image2.export_pixels_to_str
-puts Digest::SHA1.hexdigest image3.export_pixels_to_str
+image  = Magick::Image.from_blob(open(url).read).first
+image2 = Magick::Image.from_blob(open(url2).read).first
+
+#a = image.normalize.color_histogram
+#b = image2.normalize.color_histogram
+
+#t = 0
+#a.each {|key, value|
+#  b.each {|key2, value2|
+#    t +=  key <=> key2
+#  }
+#}
+
+#puts t / b.keys.length
+
+#pu = Magick::Image.from_blob(open(url2).read).first
+
+
+# puts Digest::SHA1.hexdigest image.export_pixels_to_str
+# puts Digest::SHA1.hexdigest image2.export_pixels_to_str
 

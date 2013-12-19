@@ -33,6 +33,7 @@ GEM
     refining (0.0.5.5)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    rmagick (2.13.2)
     sinatra (1.4.4)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -74,6 +75,7 @@ DEPENDENCIES
   nokogiri
   rack-flash (= 0.1.2)
   rest-client
+  rmagick
   sinatra
   sinatra-assetpack
   sinatra-contrib

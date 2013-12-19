@@ -12,6 +12,7 @@ gem 'sinatra-flash'
 gem 'sinatra-contrib'
 gem 'nokogiri'
 gem 'rest-client'
+gem 'rmagick'
 gem 'rack-flash', '0.1.2'
 
 # assets

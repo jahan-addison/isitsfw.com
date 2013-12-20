@@ -20,11 +20,10 @@ require './lib/fetch_helper'
 class App < Sinatra::Base
 
   enable :sessions
-  set :environment, :development
+  set :environment, :production
 
   set :root, File.dirname(__FILE__)
   set :bind, '0.0.0.0'
-  set :port, 8000
   Less.paths <<  "#{App.root}/public/css" 
 
   register Sinatra::AssetPack

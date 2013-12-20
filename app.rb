@@ -10,11 +10,10 @@ require 'net/http'
 require 'nokogiri'
 require 'sinatra/assetpack'
 require 'sinatra/flash'
-require 'dm-core'
 require 'data_mapper'
 include Magick
 
-require './environments'
+require './database'
 require './lib/fetch_helper'
 
 

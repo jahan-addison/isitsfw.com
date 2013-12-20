@@ -22,6 +22,7 @@ gem 'rmagick'
 gem 'sinatra-flash'
 gem 'sinatra-contrib'
 gem 'nokogiri'
+gem 'addressable'
 gem 'rest-client'
 gem 'rack-flash', '0.1.2'
 

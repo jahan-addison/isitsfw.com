@@ -186,18 +186,21 @@ EOF
       end
         # images
       if image.include? suffix.downcase
-        escaped  = URI.escape(uri.to_s, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+        escaped  = uri.to_s
         image    = Magick::Image.from_blob(open("http://i.embed.ly/1/image/resize?url=" << escaped << "&key=c814a1d73fcc48ccab27c8830d92f26b&width=80&height=80").read).first
         hash     = Digest::SHA1.hexdigest image.export_pixels_to_str
         @image   = Images.first({:image_hash => hash})
         if @image.nil?
-          url      = "https://nds.p.mashape.com/?url=" << URI.escape("http://i.embed.ly/1/image/resize?url=" << escaped << "&key=c814a1d73fcc48ccab27c8830d92f26b&width=700&height=800", Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
-          response = RestClient::Request.execute(:method => :get, :url => url, :timeout => 90000000, :open_timeout => 90000000, :headers => {
+          url      = "https://nuditysearch.p.mashape.com/nuditySearch/image"
+          postdata = {:sensitivity => 6, :objecturl => escaped}
+          response = RestClient::Request.execute(:method => :post, :url => url, :payload => postdata, :timeout => 90000000, :open_timeout => 90000000, :headers => {
             "X-Mashape-Authorization" => "oDpSINvANRazu7Yi9772wDrcaeHsYKMN"})
-          data = JSON.parse(response.body)
-          if data["is_nude"]    == 'true'
+          data           = Nokogiri::XML(response.body)
+          score          = data.xpath("//score").text
+          classification = data.xpath("//classification").text
+          if classification.downcase == 'nudity'
             safety_level = codes[:NO]
-          elsif data["is_nude"] == 'false'
+          elsif 
             safety_level = codes[:OK]
           end
           @image   = Images.new :image_hash => hash, :status => safety_level
@@ -216,20 +219,18 @@ EOF
     begin
       doc           = Nokogiri::HTML(open(uri))
 
-      keywords      = doc.xpath("//meta[@name='Keywords']/@content").to_s.split(',') \
-        .concat doc.xpath("//meta[@name='keywords']/@content").to_s.split(',')
+      keywords      = doc.xpath("//meta[@name='Keywords']/@content").text.split(',') \
+        .concat doc.xpath("//meta[@name='keywords']/@content").text.split(',')
 
-      description   = doc.xpath("//meta[@name='Description']/@content").to_s.split(' ') \
-        .concat doc.xpath("//meta[@name='description']/@content").to_s.split(' ')
+      description   = doc.xpath("//meta[@name='Description']/@content").text.split(' ') \
+        .concat doc.xpath("//meta[@name='description']/@content").text.split(' ')
 
-      title         = doc.xpath("//title").to_s.split(' ')
+      title         = doc.xpath("//title").text.split(' ')
         # and finally ...
       scan = keywords.concat description
         # include URI itself
       scan.concat uri.to_s.split(/\+|_|%20|\s|\-/)
         # title
-      title[0]  = title[0].gsub("<title>",   '')
-      title[-1] = title[-1].gsub("</title>", '')
       scan.concat title
 
       # 3) analyze content

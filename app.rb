@@ -75,7 +75,7 @@ EOF
         "The location or file passed the scanner algorithms with flying colors! Please continue to be cautious of links from whom you do not trust."
       when status === "no"
         "The scanner algorithms search through metadata and other informative details that prescribe the content thereof; in the case of files such " <<
-        "as images, decisive skin algorithms were triggered and it is <span class='red'>best</span> to avoid--false-positive may occur on close shots."
+        "as images, decisive skin algorithms were triggered, and it is <span class='red'>best</span> to avoid. False-positive may occur on close shots or shots with little skin."
       when status === "maybe"
         "This particularly happens when an OK file was scanned, however its contents were 'plain text' -- and likely safe."
       when status === "not_sure"
@@ -191,7 +191,7 @@ EOF
         hash     = Digest::SHA1.hexdigest image.export_pixels_to_str
         @image   = Images.first({:image_hash => hash})
         if @image.nil?
-          url      = "https://nds.p.mashape.com/?url=" << URI.escape("http://i.embed.ly/1/image/resize?url=" << escaped << "&key=c814a1d73fcc48ccab27c8830d92f26b&width=700&height=600", Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+          url      = "https://nds.p.mashape.com/?url=" << URI.escape("http://i.embed.ly/1/image/resize?url=" << escaped << "&key=c814a1d73fcc48ccab27c8830d92f26b&width=700&height=800", Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
           response = RestClient::Request.execute(:method => :get, :url => url, :timeout => 90000000, :open_timeout => 90000000, :headers => {
             "X-Mashape-Authorization" => "oDpSINvANRazu7Yi9772wDrcaeHsYKMN"})
           data = JSON.parse(response.body)

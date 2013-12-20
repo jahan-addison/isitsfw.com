@@ -1,17 +1,10 @@
-configure :development do
- set :database, 'sqlite:///dev.db'
- set :show_exceptions, true
+DataMapper.setup(:default, ENV['DATABASE_URL'] || "sqlite3://#{Dir.pwd}/dev.db")
+
+class Images
+    include DataMapper::Resource
+    property :id, Serial
+    property :image_hash, Text, :required => true, :unique => true
+    property :status, Integer, :required => true
 end
 
-configure :production do
- db = URI.parse(ENV['DATABASE_URL'] || 'postgres:///localhost/mydb')
-
- ActiveRecord::Base.establish_connection(
-   :adapter  => db.scheme == 'postgres' ? 'postgresql' : db.scheme,
-   :host     => db.host,
-   :username => db.user,
-   :password => db.password,
-   :database => db.path[1..-1],
-   :encoding => 'utf8'
- )
-end
+DataMapper.auto_upgrade!

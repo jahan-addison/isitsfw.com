@@ -4,26 +4,26 @@ ruby '1.9.3'
 
 # platform
 gem 'sinatra'
-gem "activerecord"
+gem 'data_mapper'
 gem 'thin'
 
-# deps
-
+#deps
+  #database
 group :development do
- gem 'sqlite3'
- gem "tux"
+  gem 'dm-sqlite-adapter'
 end
 
 group :production do
- gem 'pg'
+  gem 'dm-postgres-adapter'
 end
 
+gem 'rmagick'
 gem 'sinatra-flash'
 gem 'sinatra-contrib'
 gem 'nokogiri'
 gem 'rest-client'
-gem 'rmagick'
 gem 'rack-flash', '0.1.2'
+
 
 # assets
 gem 'therubyracer'

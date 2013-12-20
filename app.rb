@@ -4,21 +4,23 @@ require 'less'
 require 'uri'
 require 'open-uri'
 require 'rest-client'
+require 'RMagick'
+require 'digest/sha1'
 require 'net/http'
 require 'nokogiri'
 require 'sinatra/assetpack'
 require 'sinatra/flash'
+require 'data_mapper'
+include Magick
+
 require './environments'
 require './lib/fetch_helper'
 
-class Image < ActiveRecord::Base
-  validates :hash, presence: true
-end
 
 class App < Sinatra::Base
-  set :environment, :development
 
   enable :sessions
+  set :environment, :development
 
   set :root, File.dirname(__FILE__)
   set :bind, '0.0.0.0'
@@ -60,7 +62,7 @@ class App < Sinatra::Base
 
   get '/about' do
     message = <<EOF
-Isitsfw.com is a service for employees who work in front of a screen, like me. There are times when we stumble upon links or are sent links through email or some other chat protocol. We <span class="red">MUST</span> be cautious and at all cost know the safety of whether or not a link, image, video, <u>WHATEVER</u> is SFW.
+Isitsfw.com is a service for employees who work in front of a computer screen, like me. There are times when we stumble upon links or are sent links through email or some other chat protocol. We <span class="red">MUST</span> be cautious and at all cost know the safety of whether or not a link, image, video, <u>WHATEVER</u> is SFW.
 <br /><br />
 My name is <a href="http://www.twitter.com/_jahan_">Jahan</a>, I am currently a Front-End Web Developer for Media Matters for America, based in Washington, D.C. 
 <br /> <a class='return' href='/'> Return back </a> 
@@ -75,7 +77,7 @@ EOF
         "The location or file passed the scanner algorithms with flying colors! Please continue to be cautious of links from whom you do not trust."
       when status === "no"
         "The scanner algorithms search through metadata and other informative details that prescribe the content thereof; in the case of files such " <<
-        "as images, decisive skin algorithms were triggered and it is <span class='red'>best</span> to avoid--false-positive occur only rarely."
+        "as images, decisive skin algorithms were triggered and it is <span class='red'>best</span> to avoid--false-positive may occur on close shots."
       when status === "maybe"
         "This particularly happens when an OK file was scanned, however its contents were 'plain text' -- and likely safe."
       when status === "not_sure"
@@ -187,14 +189,24 @@ EOF
         # images
       if image.include? suffix.downcase
         escaped  = URI.escape(uri.to_s, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
-        url      = "https://nds.p.mashape.com/?url=" << URI.escape("http://i.embed.ly/1/image/resize?url=" << escaped << "&key=c814a1d73fcc48ccab27c8830d92f26b&width=700&height=600", Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
-        response = RestClient::Request.execute(:method => :get, :url => url, :timeout => 15, :open_timeout => 15, :headers => {
-          "X-Mashape-Authorization" => "oDpSINvANRazu7Yi9772wDrcaeHsYKMN"})
-        data = JSON.parse(response.body)
-        if data["is_nude"]    == 'true'
-          safety_level = codes[:NO]
-        elsif data["is_nude"] == 'false'
-          safety_level = codes[:OK]
+        image    = Magick::Image.from_blob(open("http://i.embed.ly/1/image/resize?url=" << escaped << "&key=c814a1d73fcc48ccab27c8830d92f26b&width=80&height=80").read).first
+        hash     = Digest::SHA1.hexdigest image.export_pixels_to_str
+        @image   = Images.first({:image_hash => hash})
+        if @image.nil?
+          url      = "https://nds.p.mashape.com/?url=" << URI.escape("http://i.embed.ly/1/image/resize?url=" << escaped << "&key=c814a1d73fcc48ccab27c8830d92f26b&width=700&height=600", Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+          response = RestClient::Request.execute(:method => :get, :url => url, :timeout => 15, :open_timeout => 15, :headers => {
+            "X-Mashape-Authorization" => "oDpSINvANRazu7Yi9772wDrcaeHsYKMN"})
+          data = JSON.parse(response.body)
+          if data["is_nude"]    == 'true'
+            safety_level = codes[:NO]
+          elsif data["is_nude"] == 'false'
+            safety_level = codes[:OK]
+          end
+          @image   = Images.new :image_hash => hash, :status => safety_level
+          @image.save
+        else
+          # we have a status already!
+          safety_level = @image[:status]
         end
       end
     end

@@ -1,1 +1,1 @@
-web bundle exec thin start -R config.ru -e production -p 80
+web: bundle exec ruby app.rb -p 80

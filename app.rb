@@ -62,7 +62,7 @@ class App < Sinatra::Base
     message = <<EOF
 Isitsfw.com is a service for employees who work in front of a computer screen, like me. There are times when we stumble upon links or are sent links through email or some other chat protocol. We <span class="red">MUST</span> be cautious and at all cost know the safety of whether or not a link, image, video, <u>WHATEVER</u> is SFW.
 <br /><br />
-My name is <a href="http://www.twitter.com/_jahan_">Jahan</a>, I am currently a Front-End Web Developer for Media Matters for America, based in Washington, D.C. 
+My name is <a href="http://www.twitter.com/_jahan_">Jahan</a>, I am currently a Front-End Web Developer at Media Matters for America, based in Washington, D.C. 
 <br /> <a class='return' href='/'> Return back </a> 
 EOF
     erb :page, :locals => {:message => message}

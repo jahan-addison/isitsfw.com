@@ -24,6 +24,7 @@ class App < Sinatra::Base
 
   set :root, File.dirname(__FILE__)
   set :bind, '0.0.0.0'
+  set :port, 80
   Less.paths <<  "#{App.root}/public/css" 
 
   register Sinatra::AssetPack

@@ -52,9 +52,9 @@ class App < Sinatra::Base
   }
 
   # test server
-  #get '/test/*/*.*' do |path, file, ext|
-  #  send_file File.join(File.expand_path(File.dirname(__FILE__) << '/tests/' << path), file.slice(0, file.length) <<  '.' << ext )
-  #end
+  get '/test/*/*.*' do |path, file, ext|
+    send_file File.join(File.expand_path(File.dirname(__FILE__) << '/tests/' << path), file.slice(0, file.length) <<  '.' << ext )
+  end
   
   get '/' do
     erb :index
@@ -224,10 +224,15 @@ EOF
       description   = doc.xpath("//meta[@name='Description']/@content").to_s.split(' ') \
         .concat doc.xpath("//meta[@name='description']/@content").to_s.split(' ')
 
+      title         = doc.xpath("//title").to_s.split(' ')
         # and finally ...
       scan = keywords.concat description
         # include URI itself
       scan.concat uri.to_s.split(/\+|_|%20|\s|\-/)
+        # title
+      title[0]  = title[0].gsub("<title>",   '')
+      title[-1] = title[-1].gsub("</title>", '')
+      scan.concat title
 
       # 3) analyze content
       scan.map!{|x| x.downcase}

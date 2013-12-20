@@ -4,11 +4,10 @@ var should = require('chai').should(),
     path = require('path');
 
 var rest = require('restler');
-console.log('NOT SURE:');
 describe('NOT SURE', function() {
   describe('FILES', function() {
     it ('should acquire file', function() {
-      files = fs.readdirSync('./MAYBE/');
+      files = fs.readdirSync( __dirname + '/MAYBE/');
       files.forEach(function(e) {
         describe('file', function(){
           it('should return status code 2', function(done){

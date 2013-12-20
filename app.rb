@@ -80,7 +80,7 @@ EOF
         "This particularly happens when an OK file was scanned, however its contents were 'plain text' -- and likely safe."
       when status === "not_sure"
         "This could mean a couple of things. There could have been an error with the URL (e.g. non-existent, 404 not found, etc); or a particular media," <<
-        "binary, or object file was scanned which could be initially harmless without further action."
+        " binary, or object file was scanned which could be initially harmless without further action."
     end
 
     if !params[:async].nil?

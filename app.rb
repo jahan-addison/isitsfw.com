@@ -50,9 +50,9 @@ class App < Sinatra::Base
   }
 
   # test server
-   get '/test/*/*.*' do |path, file, ext|
-    send_file File.join(File.expand_path(File.dirname(__FILE__) << '/tests/' << path), file.slice(0, file.length) <<  '.' << ext )
-   end
+   #get '/test/*/*.*' do |path, file, ext|
+   # send_file File.join(File.expand_path(File.dirname(__FILE__) << '/tests/' << path), file.slice(0, file.length) <<  '.' << ext )
+   #end
   
   get '/' do
     erb :index
@@ -156,7 +156,6 @@ EOF
     end
     # we REQUIRE a scheme
     params[:url] = "http://" << params[:url] unless params[:url].match(/^https?\:\/{2}/)
-    puts "'" << params[:url] << "'"
     uri = URI(params[:url])
 
     # we REQUIRE a path
@@ -188,7 +187,6 @@ EOF
         # images
       if image.include? suffix.downcase
         escaped  = URI::encode(uri.to_s)
-        puts escaped
         image    = Magick::Image.from_blob(open("http://i.embed.ly/1/image/resize?url=" << escaped << "&key=c814a1d73fcc48ccab27c8830d92f26b&width=80&height=80").read).first
         hash     = Digest::SHA1.hexdigest image.export_pixels_to_str
         @image   = Images.first({:image_hash => hash})

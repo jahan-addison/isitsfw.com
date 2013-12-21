@@ -12,8 +12,8 @@ describe('NO', function() {
         describe('file', function(){
           it('should return status code 0', function(done){
             this.timeout(15000);
-            rest.post('http://isitsfw.com:8000', {
-              data: { async: true, url: 'http://isitsfw.com:8000/test/NO/IMAGES/' + encodeURIComponent(e) }, timeout: 15000
+            rest.post('http://soliloq.uy:4567', {
+              data: { async: true, url: 'http://soliloq.uy:4567/test/NO/IMAGES/' + encodeURIComponent(e) }, timeout: 15000
             }).on('complete', function(data, response) {
               if (data.status !== 0) {
                 throw new Error(e);

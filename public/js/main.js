@@ -78,7 +78,7 @@ $(function() {
       url:      document.href,
       type:     "POST",
       dataType: 'json',
-      data:     {async: true, url: $uri.toString()},
+      data:     {async: true, url: encodeURI($uri.toString())},
       timeout:  15 * 1000,
       dataType: 'json',
     }).done(function(data) {

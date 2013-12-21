@@ -50,9 +50,9 @@ class App < Sinatra::Base
   }
 
   # test server
-  # get '/test/*/*.*' do |path, file, ext|
-  #  send_file File.join(File.expand_path(File.dirname(__FILE__) << '/tests/' << path), file.slice(0, file.length) <<  '.' << ext )
-  # end
+   get '/test/*/*.*' do |path, file, ext|
+    send_file File.join(File.expand_path(File.dirname(__FILE__) << '/tests/' << path), file.slice(0, file.length) <<  '.' << ext )
+   end
   
   get '/' do
     erb :index
@@ -72,10 +72,10 @@ EOF
     status  = params[:captures].first
     message = case 
       when status === "yes"
-        "The location or file passed the scanner algorithms with flying colors! Please continue to be cautious of links from whom you do not trust."
+        "The location or file passed the content scan algorithms! Please continue to be cautious of links from people whom you do not trust."
       when status === "no"
-        "The scanner algorithms search through metadata and other informative details that prescribe the content thereof; in the case of files such " <<
-        "as images, decisive skin algorithms were triggered, and it is <span class='red'>best</span> to avoid. False-positive may occur on close shots or shots with little skin."
+        "The scan algorithms search through metadata and other informative details that prescribe the content thereof; in the case of files such " <<
+        "as images, decisive skin algorithms were triggered, and it is <span class='red'>best</span> to avoid."
       when status === "maybe"
         "This particularly happens when an OK file was scanned, however its contents were 'plain text' -- and likely safe."
       when status === "not_sure"
@@ -156,6 +156,7 @@ EOF
     end
     # we REQUIRE a scheme
     params[:url] = "http://" << params[:url] unless params[:url].match(/^https?\:\/{2}/)
+    puts "'" << params[:url] << "'"
     uri = URI(params[:url])
 
     # we REQUIRE a path
@@ -186,7 +187,8 @@ EOF
       end
         # images
       if image.include? suffix.downcase
-        escaped  = uri.to_s
+        escaped  = URI::encode(uri.to_s)
+        puts escaped
         image    = Magick::Image.from_blob(open("http://i.embed.ly/1/image/resize?url=" << escaped << "&key=c814a1d73fcc48ccab27c8830d92f26b&width=80&height=80").read).first
         hash     = Digest::SHA1.hexdigest image.export_pixels_to_str
         @image   = Images.first({:image_hash => hash})

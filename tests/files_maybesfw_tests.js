@@ -12,8 +12,8 @@ describe('MAYBE', function() {
         describe('file', function(){
           it('should return status code 1', function(done){
             this.timeout(15000);
-            rest.post('http://isitsfw.com:8000', {
-              data: { async: true, url: 'http://isitsfw.com:8000/test/MAYBE/' + encodeURIComponent(e) }, timeout: 15000
+            rest.post('http://soliloq.uy:4567', {
+              data: { async: true, url: 'http://soliloq.uy:4567/test/MAYBE/' + encodeURIComponent(e) }, timeout: 15000
             }).on('complete', function(data, response) {
               if (data.status !== 1) {
                 throw new Error(e);

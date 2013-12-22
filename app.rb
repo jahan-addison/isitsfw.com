@@ -75,7 +75,7 @@ EOF
         "The location or file passed the content scan algorithms! Please continue to be cautious of links from people whom you do not trust."
       when status === "no"
         "The scan algorithms search through metadata and other informative details that prescribe the content thereof; in the case of files such " <<
-        "as images, decisive skin algorithms were triggered, and it is <span class='red'>best</span> to avoid."
+        "as images, decisive skin algorithms were triggered, and it is best to avoid."
       when status === "maybe"
         "This particularly happens when an OK file was scanned, however its contents were 'plain text' -- and likely safe."
       when status === "not_sure"

@@ -192,7 +192,7 @@ EOF
         @image   = Images.first({:image_hash => hash})
         if @image.nil?
           url      = "https://nuditysearch.p.mashape.com/nuditySearch/image"
-          postdata = {:sensitivity => 6, :objecturl => escaped}
+          postdata = {:sensitivity => 10, :objecturl => escaped}
           response = RestClient::Request.execute(:method => :post, :url => url, :payload => postdata, :timeout => 90000000, :open_timeout => 90000000, :headers => {
             "X-Mashape-Authorization" => "oDpSINvANRazu7Yi9772wDrcaeHsYKMN"})
           data           = Nokogiri::XML(response.body)

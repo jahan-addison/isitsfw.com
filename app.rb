@@ -13,7 +13,7 @@ require 'sinatra/flash'
 require 'data_mapper'
 include Magick
 
-require './database'
+require './environment'
 require './lib/fetch_helper'
 
 

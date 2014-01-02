@@ -7,7 +7,7 @@ var rest = require('restler');
 describe('NOT SURE', function() {
   describe('FILES', function() {
     it ('should acquire file', function() {
-      files = fs.readdirSync( __dirname + '/MAYBE/');
+      files = fs.readdirSync( __dirname + '/NOT_SURE/FILES/');
       files.forEach(function(e) {
         describe('file', function(){
           it('should return status code 2', function(done){

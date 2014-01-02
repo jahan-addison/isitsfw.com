@@ -259,9 +259,9 @@ EOF
         return send! safety_level
       end
 
-        # if it was a web file, we're good
-        # any other file, maybe
-        # anything else, yes.
+      # if it was a web file, we're good
+      # any other file, maybe
+      # anything else, yes.
     if safety_level == codes[:MAYBE]
       unless suffix.nil?
         if good_files.include? suffix.downcase

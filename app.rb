@@ -20,8 +20,9 @@ require './lib/fetch_helper'
 class App < Sinatra::Base
 
   enable :sessions
-  set :environment, :production
-
+  set :environment, :development
+  set :bind, '0.0.0.0'
+  
   set :root, File.dirname(__FILE__)
   Less.paths <<  "#{App.root}/public/css" 
 
@@ -50,9 +51,9 @@ class App < Sinatra::Base
   }
 
   # test server
-   #get '/test/*/*.*' do |path, file, ext|
-   # send_file File.join(File.expand_path(File.dirname(__FILE__) << '/tests/' << path), file.slice(0, file.length) <<  '.' << ext )
-   #end
+  get '/test/*/*.*' do |path, file, ext|
+    send_file File.join(File.expand_path(File.dirname(__FILE__) << '/tests/' << path), file.slice(0, file.length) <<  '.' << ext )
+  end
   
   get '/' do
     erb :index
@@ -129,14 +130,21 @@ EOF
       "tar", "tax2012", "aif", "iff", "m3u", "m4a", "mid", "mp3", "mpa", "ra", "wav", "wma", "3g2", "3gp", "asf", "asx", "avi", "flv", "m4v", "mov", "mp4",
       "mpg", "rm", "srt", "swf", "vob", "wmv", "3dm", "3ds", "max", "obj", "bmp", "dds",
       "psd", "pspimage", "tga", "thm", "tif",  "yuv", "ai", "eps", "ps", "svg", "indd", "pct", "pdf", "xlr", "xls", "xlsx", "accdb", "db", 
-      "pdb", "apk", "app", "bat", "cgi", "com", "exe", "gadget", "jar", "pif", "vb",
+      "pdb", "apk", "app", "bat", "com", "exe", "gadget", "jar", "pif", "vb",
       "wsf", "dem", "gam", "nes", "rom", "sav", "dwg", "dxf", "gpx", "kml", "kmz", 
       "fnt", "fon", "otf", "ttf", "cab", "cpl", "cur", "deskthemepack", "dll", "dmp", 
       "icns", "ico", "lnk", "sys", "cfg", "ini", "prf", "hqx", "mim", "uue", "7z", "cbr",
       "deb", "gz", "pkg", "rar", "rpm", "sitx", "tar.gz", "zip", "zipx", "bin", "cue", "dmg",
       "iso", "dbf", "mdb", "plugin", "mdf", "toast", "drv", "vcd", 
       "xcodeproj", "bak", "tmp", "crdownload", "ics", "msi", "part", "torrent"
-    ];
+    ]
+    # good files
+    good_files  = [
+      "asp", "aspx", "axd", "asx", "asmx", "ashx", "css", "cfm", "yaws", "swf", 
+      "html", "htm", "xhtml", "jhtml", "jsp", "jspx", "wss", "do", "action", "js", 
+      "pl", "php", "php4", "php3", "phtml", "py", "rb", "rhtml", "xml", "rss", 
+      "axd", "asx", "asmx", "ashx", "aspx", "axd", "asx", "asmx", "ashx", "aspx"
+    ]
 
     # response helper for graceful degradation
     def send!(safety_level)
@@ -252,12 +260,19 @@ EOF
         return send! safety_level
       end
 
-        # if it was a file that was OK, maybe
-        # otherwise yes.
-    if safety_level == codes[:MAYBE] && suffix.nil?
-      safety_level = codes[:OK]
+        # if it was a web file, we're good
+        # any other file, maybe
+        # anything else, yes.
+    if safety_level == codes[:MAYBE]
+      unless suffix.nil?
+        if good_files.include? suffix.downcase
+          safety_level = codes[:OK]
+        end
+      else
+        safety_level = codes[:OK]
+      end
     end
-
+  
     return send! safety_level
 
   end

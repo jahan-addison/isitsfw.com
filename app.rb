@@ -20,8 +20,7 @@ require './lib/fetch_helper'
 class App < Sinatra::Base
 
   enable :sessions
-  set :environment, :development
-  set :bind, '0.0.0.0'
+  set :environment, :production
   
   set :root, File.dirname(__FILE__)
   Less.paths <<  "#{App.root}/public/css" 

@@ -50,8 +50,8 @@ class App < Sinatra::Base
   }
 
   # test server
-  get '/test/*/*.*' do |path, file, ext|
-    send_file File.join(File.expand_path(File.dirname(__FILE__) << '/tests/' << path), file.slice(0, file.length) <<  '.' << ext )
+ # get '/test/*/*.*' do |path, file, ext|
+ #   send_file File.join(File.expand_path(File.dirname(__FILE__) << '/tests/' << path), file.slice(0, file.length) <<  '.' << ext )
   end
   
   get '/' do
@@ -79,7 +79,7 @@ EOF
       when status === "maybe"
         "This particularly happens when an OK file was scanned, however its contents were 'plain text' -- and likely safe."
       when status === "not_sure"
-        "This could mean a couple of things. There could have been an error with the URL (e.g. non-existent, 404 not found, too many redirects, etc); or a particular media," <<
+        "This could mean a couple of things. There could have been an error with the URL (e.g. non-existent, 404 not found, SSL-only (https), too many redirects, etc); or a particular media," <<
         " binary, or object file was scanned which could be initially harmless without further action."
     end
 

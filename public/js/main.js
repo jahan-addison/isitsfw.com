@@ -150,12 +150,14 @@ $(function() {
         }, 900);
         return false;
       }
-      running = true;
+      running = true,
+      uri     = input.val();
       if (!input.val().match(/^https?\:\/\//)) {
-        input.val("http://" + input.val());
+        //input.val("http://" + input.val());
+        uri = "http://" + uri;
       }
       var errors = false;
-      var url    = window.$uri = new URI(input.val());
+      var url    = window.$uri = new URI(uri);
       var proto = url._parts.protocol,
           host    = url._parts.domain;
       if (!url.is('absolute')) { errors = true; }

@@ -7,6 +7,7 @@ require 'rest-client'
 require 'RMagick'
 require 'digest/sha1'
 require 'net/http'
+require 'net/https'
 require 'nokogiri'
 require 'sinatra/assetpack'
 require 'sinatra/flash'
@@ -21,7 +22,7 @@ class App < Sinatra::Base
 
   enable :sessions
   set :environment, :production
-  
+
   set :root, File.dirname(__FILE__)
   Less.paths <<  "#{App.root}/public/css" 
 
@@ -79,7 +80,7 @@ EOF
       when status === "maybe"
         "This particularly happens when an OK file was scanned, however its contents were 'plain text' -- and likely safe."
       when status === "not_sure"
-        "This could mean a couple of things. There could have been an error with the URL (e.g. non-existent, 404 not found, SSL-only (https), too many redirects, etc); or a particular media," <<
+        "This could mean a couple of things. There could have been an error with the URL (e.g. non-existent, 404 not found, too many redirects); or a particular media," <<
         " binary, or object file was scanned which could be initially harmless without further action."
     end
 
@@ -170,13 +171,21 @@ EOF
 
     # 0) let's see if this URL is even real
     begin
-      res = fetch(uri)
-    rescue Exception
-      safety_level = codes[:NOT_SURE]
-      # emergancy halt
-      return send! safety_level
+      res, uri = fetch(uri)
+    rescue => e
+      # let's try once more with https
+      params[:url].sub!("http", "https")
+      uri      = URI(params[:url])
+      uri.path = '/'
+      begin
+        res, uri = fetch(uri)
+      rescue => e
+        safety_level = codes[:NOT_SURE]
+        # emergancy halt
+        return send! safety_level
+      end
     end
-    
+
     safety_level = codes[:NOT_SURE] unless res.code == "200"
     if safety_level == codes[:NOT_SURE]
       # emergancy halt
@@ -218,6 +227,7 @@ EOF
         end
       end
     end
+
     # 2) check meta-tags: description, author, keywords, et al if applicable
       # load up our list of "naughty words"
     fd            = File.open("lib/bad_words.txt")
@@ -225,7 +235,6 @@ EOF
     fd.close
     begin
       doc           = Nokogiri::HTML(open(uri))
-
       keywords      = doc.xpath("//meta[@name='Keywords']/@content").text.split(',') \
         .concat doc.xpath("//meta[@name='keywords']/@content").text.split(',')
 
@@ -246,14 +255,13 @@ EOF
         safety_level = codes[:NO] if scan.include? x.downcase
         safety_level = codes[:NO] if uri.host.downcase.include? x
       }
-
       # 4) return status code (safety level)
         # special case (youtube.com)
         family_safe = doc.xpath("//meta[@name='isFamilyFriendly']/@content").to_s
         if (!family_safe.empty? && family_safe != 'True')
           safety_level = codes[:NO]
         end
-      rescue Exception
+      rescue Exception => e
         # emergancy halt
         safety_level == codes[:NOT_SURE]
         return send! safety_level
